@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\ProductModel;
 
 use App\Models\User;
 
@@ -57,6 +58,7 @@ class LoginController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'address' => ['required'],
             'contactNo' => [ 'required',
             'regex:/^(\+?63|0)9\d{9}$/', // Philippines format: +639XXXXXXXXX or 09XXXXXXXXX
             'unique:users'],
@@ -65,6 +67,7 @@ class LoginController extends Controller
 
         $data = ['name' => $request->name,
                  'email' => $request->email,
+                 'address' => $request->address,
                  'contactNo' => $request->contactNo,
                  'password' => Hash::make($request->password),
                  'role' => 'customer'
@@ -77,4 +80,20 @@ class LoginController extends Controller
 
         return redirect('shop/home');
         }
+
+        //guest view
+
+        public function guestView()
+        {
+            $product = ProductModel::all();
+
+            $categories = ProductModel::select('productCategory')
+            ->distinct()
+            ->get();
+        
+
+
+            return view('user.login', compact('product', 'categories'));
+        }
+
 }

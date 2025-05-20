@@ -18,4 +18,18 @@ class SellerModel extends Model
         'shopStatus'
     ];
 
+
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userID');
+    }
+    public function product()
+    {
+        return $this->hasMany(ProductModel::class, 'userID', 'userID');
+    }
+
+
+    
+
 }

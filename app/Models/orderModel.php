@@ -16,4 +16,10 @@ class orderModel extends Model
         'orderCode',
         'status'
     ];
+
+
+    public function product()
+    {
+        return $this->belongsTo(ProductModel::class, 'prod_id');
+    }
 }
