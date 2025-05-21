@@ -471,4 +471,11 @@ public function riderDashboard()
     
     return view('rider.dashboard', compact('assignOrders', 'completeOrders', 'failedOrders','order', 'orderFailedCount', 'orderCompleteCount', 'orderAssignCount'));
 }
+
+    public function viewRider()
+    {
+
+        // $rider = orderModel::
+        return view('admin.rider.dashboard');
+    } 
 }
