@@ -182,11 +182,11 @@ select.form-select {
 </div>
 
 <div class="col-md-4">
-  <a href="#" class="text-decoration-none">
+  <a href="{{ route('suspendSeller')}}" class="text-decoration-none">
     <div class="card text-dark bg-white mb-4 shadow rounded-4 border-0 hover-scale">
       <div class="card-body text-center fw-bold">
         <h5 class="card-title">Suspended Sellers</h5>
-        <p class="card-text display-6">{{ $totalRiders }}</p>
+        <p class="card-text display-6">{{ $getsuspendSellers }}</p>
       </div>
     </div>
   </a>
@@ -239,7 +239,7 @@ select.form-select {
                 data-shop-status="{{ $seller->shopStatus }}">
                 <option value="underReview" {{ $seller->shopStatus == 'underReview' ? 'selected' : '' }}>Under Review</option>
                 <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
-                <option value="Suspend" {{ $seller->shopStatus == 'Suspend' ? 'selected' : '' }}>Suspend</option>
+                <option value="suspend" {{ $seller->shopStatus == 'suspend' ? 'selected' : '' }}>Suspend</option>
               </select>
             </td>
           <td>

@@ -38,7 +38,7 @@
 
         <div class="card-body">
           <h4 class="card-title">{{ $product->productName }}</h4>
-          <h5 class="text-success">Unit Price: $<span id="unitPriceDisplay">{{ number_format($product->productPrice, 2) }}</span></h5>
+          <h5 class="text-success">Unit Price: ₱<span id="unitPriceDisplay">{{ number_format($product->productPrice, 2) }}</span></h5>
 
           <div class="mb-2">
             <span class="star-rating">★★★★☆</span>
@@ -57,7 +57,7 @@
 
 
           <div class="mb-3">
-            <h6>Total: $<span id="mainTotal">{{ number_format($product->productPrice, 2) }}</span></h6>
+            <h6>Total: ₱<span id="mainTotal">{{ number_format($product->productPrice, 2) }}</span></h6>
           </div>
 
           <!-- Hidden Forms -->

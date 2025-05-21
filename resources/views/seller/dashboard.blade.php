@@ -143,6 +143,7 @@
   <div class="sidebar-header">
     <!-- <img src="https://via.placeholder.com/60" alt="Profile Picture"> -->
     <div>Seller:<strong>{{ Auth::user()->name }}</strong></div>
+    <div><strong>Shop Name:</strong> {{ Auth::user()->regseller->bussinessName ?? 'N/A' }}</div>
     <small>{{ Auth::user()->email }}</small>
   </div>
     <a href="#" id="nav-dashboard" class="nav-link" onclick="setActive('dashboard')">Dashboard</a>
@@ -230,51 +231,52 @@
           </tr>
         </thead>
         <tbody>
-          @foreach($orders as $order) <!-- Assuming you're passing the orders from controller -->
-          <tr>
-            <td>{{ $loop->iteration }}</td>
-            <td>{{ $order->orderCode }}</td>
-            <td>{{ $order->product->productName }}</td> <!-- Assuming the product is linked to the order -->
-            <td>{{ $order->quantity }}</td>
-            <td>₱ {{ number_format($order->totalPrice, 2) }}</td>
-            <td>
-              @if($order->status == 'Pending')
-              <select class="form-select status-selector" data-order-id="{{ $order->id }}"
-          data-product-id="{{ $order->product->id }}"
-          data-order-code="{{ $order->orderCode }}"
-          data-quantity="{{ $order->quantity }}"
-          data-total-price="{{ $order->totalPrice }}">
-        <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-        <option value="claimedByDeliveryPartner" {{ $order->status == 'claimedByDeliveryPartner' ? 'selected' : '' }}> On Deliver</option>
-         <option value="Cancelled" {{ $order->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-      </select>
+  @foreach($orders as $order)
+    <tr>
+      <td>{{ $loop->iteration }}</td>
+      <td>{{ $order->orderCode }}</td>
+      <td>{{ $order->product->productName }}</td>
+      <td>{{ $order->quantity }}</td>
+      <td>₱ {{ number_format($order->totalPrice, 2) }}</td>
+      <td>
+        
+        @if($order->status == 'Pending' || $order->status == 'claimedByDeliveryPartner')
+          <select class="form-select status-selector" data-order-id="{{ $order->id }}"
+            data-product-id="{{ $order->product->id }}"
+            data-order-code="{{ $order->orderCode }}"
+            data-quantity="{{ $order->quantity }}"
+            data-total-price="{{ $order->totalPrice }}">
+            <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+            <option value="claimedByDeliveryPartner" {{ $order->status == 'claimedByDeliveryPartner' ? 'selected' : '' }}>Assign Rider</option>
+            <option value="Cancelled" {{ $order->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+          </select>
 
-      @elseif($order->status == 'claimedByDeliveryPartner')
-      <select class="form-select status-selector" data-order-id="{{ $order->id }}"
-          data-product-id="{{ $order->product->id }}"
-          data-order-code="{{ $order->orderCode }}"
-          data-quantity="{{ $order->quantity }}"
-          data-total-price="{{ $order->totalPrice }}">
-          <option value="Completed" {{ $order->status == 'Completed' ? 'selected' : '' }}>Completed</option>
-        <option value="claimedByDeliveryPartner" {{ $order->status == 'claimedByDeliveryPartner' ? 'selected' : '' }}> On Deliver</option>
-      </select>
+          <!-- Rider selection -->
+          <div class="rider-selection mt-2">
+            @if($order->rider)
+              <div class="mt-2 text-success fw-bold">
+                Assigned to: {{ $order->rider->name }} ({{ $order->rider->contactNo }})
+              </div>
+            @else
+              <select class="form-select rider-dropdown" data-order-id="{{ $order->id }}">
+                <option value="">Select Rider</option>
+                @foreach($riders as $rider)
+                  <option value="{{ $rider->id }}">{{ $rider->name }} ({{ $rider->contactNo }})</option>
+                @endforeach
+              </select>
+            @endif
+          </div>
+        @elseif($order->status == 'Completed')
+          <span class="badge bg-success">Completed</span>
+        @else
+          <span class="badge bg-danger">Cancelled</span>
+        @endif
+      </td>
+      <td><a href="" class="btn btn-primary btn-sm">View</a></td>
+    </tr>
+  @endforeach
+</tbody>
 
-
-      @elseif($order->status == 'Completed')
-    
-      <span class="badge bg-success">Completed</span>
-             
-      @else
-      <span class="badge bg-danger">Cancelled</span>
-              @endif
-            </td>
-            <td>
-              <!-- You can add action buttons like "View" or "Edit" here -->
-              <a href="" class="btn btn-primary btn-sm">View</a>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
       </table>
     </div>
   </div>  
@@ -391,136 +393,109 @@
   </div>
 </div>
 
-
 <script>
- document.getElementById('toggleSidebar')?.addEventListener('click', function () {
-    document.getElementById('sidebar').classList.toggle('active');
-  });
-
-  function showMyOrders() {
-
-document.getElementById('dashboard').style.display = 'none';
-document.getElementById('my-profile').style.display = 'none';
-document.getElementById('my-products').style.display = 'none';
-// Show the My Products section
-document.getElementById('my-orders').style.display = 'block';
-
-// Optionally scroll into view
-    document.getElementById('my-orders').scrollIntoView({ behavior: 'smooth' });  
-    }
-
-  function showMyProducts() {
-
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('my-profile').style.display = 'none';
-    document.getElementById('my-orders').style.display = 'none';
-    
-    // Show the My Products section
-    document.getElementById('my-products').style.display = 'block';
-
-    // Optionally scroll into view
-    document.getElementById('my-products').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  function showMyDashboard() {
-    // Hide other sections if needed
-    document.getElementById('my-products').style.display = 'none';
-    document.getElementById('my-profile').style.display = 'none';
-    document.getElementById('my-orders').style.display = 'none';
-    
-    // Show the My Products section
-    document.getElementById('dashboard').style.display = 'block';
-
-    // Optionally scroll into view
-    document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
-  }
-
-  function showMyProfile() {
-    // Hide other sections if needed
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('my-products').style.display = 'none';
-    document.getElementById('my-orders').style.display = 'none';
-    
-    // Show the My Products section
-    document.getElementById('my-profile').style.display = 'block';
-
-    // Optionally scroll into view
-    document.getElementById('my-profile').scrollIntoView({ behavior: 'smooth' });
-  }
-
-
-  document.getElementById('toggleSidebar')?.addEventListener('click', function () {
-    document.getElementById('sidebar').classList.toggle('active');
-  });
-
-  function setActive(section) {
-    // Remove active class from all nav links
-    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-
-    // Hide all sections
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('my-products').style.display = 'none';
-    document.getElementById('my-profile').style.display = 'none';
-    document.getElementById('my-orders').style.display = 'none';
-
-    // Show and activate selected section
-    if (section === 'dashboard') {
-      document.getElementById('dashboard').style.display = 'block';
-      document.getElementById('nav-dashboard').classList.add('active');
-    } else if (section === 'products') {
-      document.getElementById('my-products').style.display = 'block';
-      document.getElementById('nav-products').classList.add('active');
-    } else if (section === 'profile') {
-      document.getElementById('my-profile').style.display = 'block';
-      document.getElementById('nav-profile').classList.add('active');
-    }
-    
-    else if (section === 'orders') {
-      document.getElementById('my-orders').style.display = 'block';
-      document.getElementById('nav-orders').classList.add('active');
-    }
-  }
-
-  window.onload = function () {
-    setActive('dashboard');
-  };
-
-
-  document.addEventListener('DOMContentLoaded', function () {
-    document.querySelectorAll('.status-selector').forEach(function (selector) {
-        selector.addEventListener('change', function () {
-            const orderId = this.getAttribute('data-order-id');
-            const productId = this.getAttribute('data-product-id');
-            const orderCode = this.getAttribute('data-order-code');
-            const quantity = this.getAttribute('data-quantity');
-            const totalPrice = this.getAttribute('data-total-price');
-            const newStatus = this.value;
-
-            fetch(`/orders/update-status/${orderId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    status: newStatus,
-                    orderCode: orderCode,
-                    productId: productId,
-                    quantity: quantity,
-                    totalPrice: totalPrice
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.message || 'Status updated successfully!');
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while updating status.');
-            });
-        });
-    });
+document.getElementById('toggleSidebar')?.addEventListener('click', function () {
+  document.getElementById('sidebar').classList.toggle('active');
 });
+
+function setActive(section) {
+  // Remove active class from all nav links
+  document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+
+  // Hide all sections
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('my-products').style.display = 'none';
+  document.getElementById('my-profile').style.display = 'none';
+  document.getElementById('my-orders').style.display = 'none';
+
+  // Show and activate selected section
+  if (section === 'dashboard') {
+    document.getElementById('dashboard').style.display = 'block';
+    document.getElementById('nav-dashboard').classList.add('active');
+  } else if (section === 'products') {
+    document.getElementById('my-products').style.display = 'block';
+    document.getElementById('nav-products').classList.add('active');
+  } else if (section === 'profile') {
+    document.getElementById('my-profile').style.display = 'block';
+    document.getElementById('nav-profile').classList.add('active');
+  } else if (section === 'orders') {
+    document.getElementById('my-orders').style.display = 'block';
+    document.getElementById('nav-orders').classList.add('active');
+  }
+}
+
+window.onload = function () {
+  setActive('dashboard');
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle order status change
+    document.querySelectorAll('.status-selector').forEach(function (selector) {
+      selector.addEventListener('change', function () {
+        const orderId = this.getAttribute('data-order-id');
+        const productId = this.getAttribute('data-product-id');
+        const orderCode = this.getAttribute('data-order-code');
+        const quantity = this.getAttribute('data-quantity');
+        const totalPrice = this.getAttribute('data-total-price');
+        const newStatus = this.value;
+
+        fetch(`/orders/update-status/${orderId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+          },
+          body: JSON.stringify({
+            status: newStatus,
+            orderCode: orderCode,
+            productId: productId,
+            quantity: quantity,
+            totalPrice: totalPrice
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          alert(data.message || 'Status updated successfully!');
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while updating status.');
+        });
+      });
+    });
+
+    // Handle rider assignment and display assigned name
+    document.querySelectorAll('.rider-dropdown').forEach(function (dropdown) {
+      dropdown.addEventListener('change', function () {
+        const riderId = this.value;
+        const orderId = this.getAttribute('data-order-id');
+        const riderName = this.options[this.selectedIndex].text;
+
+        if (riderId) {
+          fetch(`/orders/assign-rider/${orderId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ rider_id: riderId })
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert(data.message || 'Rider assigned successfully.');
+            
+            // Replace dropdown with static assignment info
+            const parent = this.closest('.rider-selection');
+            parent.innerHTML = `<div class="mt-2 text-success fw-bold">Assigned to: ${riderName}</div>`;
+          })
+          .catch(error => {
+            console.error(error);
+            alert('Failed to assign rider.');
+          });
+        }
+      });
+    });
+  });
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

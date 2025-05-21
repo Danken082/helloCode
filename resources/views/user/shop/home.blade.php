@@ -124,7 +124,8 @@
   </a>
 
   <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-    <li><a class="dropdown-item" href="/profile">Profile</a></li>
+    <li><hr class="dropdown-divider" /></li>
+    <li><a class="dropdown-item" href="/viewOrders">Orders</a></li>
     <li><hr class="dropdown-divider" /></li>
     <li>
       <form method="POST" action="{{ route('logout') }}">
@@ -174,7 +175,9 @@
       <div class="card-body">
         <h5 class="card-title">{{ $prod->productName }}</h5>
         <p class="card-text">{{ $prod->productDetails }}</p>
+        <p class="card-text">Stocks: {{ $prod->productQuantity }}</p>
         <p class="card-text">₱ {{ $prod->productPrice }}</p>
+        <p class="card-text">₱ {{ $prod->totalPrice  }}</p>
       </div>
     </div>
     </a>

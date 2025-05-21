@@ -123,6 +123,7 @@ select.form-select {
 
 <!-- Main Content -->
 <div class="main-content">
+
 <a href="javascript:history.back()" class="btn btn-outline-secondary mb-4">
       &larr; Back
     </a>
@@ -138,7 +139,6 @@ select.form-select {
             <th>Email</th>
             <th>Address</th>
             <th>Status</th>
-            <th>Count of Products</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -150,22 +150,14 @@ select.form-select {
             <td>{{ $seller->user->email }}</td>
             <td>{{ $seller->address }}</td>
             
-            
             <td>
               <select class="form-select status-selector"
                       data-user-id="{{ $seller->user->id }}">
-                <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
+             
                 <option value="Suspend" {{ $seller->shopStatus == 'Suspend' ? 'selected' : '' }}>Suspend</option>
+                 <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
               </select>
             </td>
-
-            <td>
-            <a href="{{ route('viewSellerProduct', encrypt($seller->userID))}}" class="btn btn-sm btn-outline-primary">
-    View Products ({{ $seller->product_count }})
-</a>
-
-</td>
-
             <td>
               <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewSellerModal{{ $seller->id }}">View</button>
             </td>

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\DB;
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Storage;
+
 use Illuminate\Support\Facades\Crypt;
 
 class AdminController extends Controller
@@ -35,12 +37,12 @@ class AdminController extends Controller
         $sellerPagenotations = SellerModel::with('user')->paginate(7);
 
         $getPendingSellers = SellerModel::where('shopStatus', 'underReview')->get();
-
+        $getsuspendSellers = SellerModel::where('shopStatus', 'suspend')->count();
         
         $getSellers = SellerModel::all();
 
         return view('admin.dashboard', compact('totalSellers', 'applyingSellers', 'totalCustomers', 'getPendingSellers', 'getSellers', 'totalProducts',
-                                                'sellerPagenotations', 'totalRiders'));
+                                                'sellerPagenotations', 'totalRiders', 'getsuspendSellers'));
     }
 
     public function viewPendingSellers()
@@ -48,6 +50,15 @@ class AdminController extends Controller
 
         $sellers = SellerModel::where('shopStatus', 'underReview')->get();
         return view('admin.seller.profile', compact('sellers'));
+    }
+
+
+
+    public function viewSuspendSellers()
+    {
+
+        $sellers = SellerModel::where('shopStatus', 'suspend')->get();
+        return view('admin.seller.suspentSeller', compact('sellers'));
     }
 
 
@@ -80,16 +91,30 @@ class AdminController extends Controller
 
 
     }
+
+
+    public function viewProductAdmin(Request $request, $encryptedId)
+    {
+
+        try {
+            $id = Crypt::decrypt($encryptedId);
+            $product = ProductModel::where('userID', $id)->get();
+            return view('admin.seller.productSeller', compact('product'));
+        } catch (\Exception $e) {
+            abort(404);
+        }
+    }
+
    
 
     public function shopHome(Request $request)
     {
 
         $userID = Auth::user()->id;
-        $product = ProductModel::all();
+        $product = ProductModel::where('productQuantity' ,'>', 0)->get();
 
-        $categories = ProductModel::where('userID', $userID)
-        ->select('productCategory')
+        $categories = ProductModel::
+        select('productCategory')
         ->distinct()
         ->get();
     
@@ -196,7 +221,8 @@ class AdminController extends Controller
         // Save seller data
         $seller = SellerModel::create($data);
     
-        return response()->json(['message' => 'Seller application submitted successfully.']);
+        return redirect()->back()->with('success', 'Registered Successfully. Please wait for approval.');
+
     }
 
     public function showregisterCenter(Request $request)
@@ -253,6 +279,7 @@ class AdminController extends Controller
                         ->where('status', 'pending')
                         ->get();
 
+        $riders = User::where('role', 'rider')->get();
 
         //counting the data
         $totalPending = $orderPending->count();
@@ -260,14 +287,16 @@ class AdminController extends Controller
     
         $orderHist = OrderHistoryModel::where('userID', $userID)->get();
 
-        $orders = orderModel::all();
+        $orders = orderModel::where('userID', $userID)->get();
     
         // Redirect based on shopStatus
         if ($seller) {
             if ($seller->shopStatus === 'shopAccepted') {
                 return view('seller.dashboard', compact('seller', 'product',
-                'orderHist', 'totalProducts', 'bestSellers', 'totalSales','totalPending', 'orders'));
+                'orderHist', 'totalProducts', 'bestSellers', 'totalSales','totalPending', 'orders', 'riders'));
             } elseif ($seller->shopStatus === 'underReview') {
+
+
                 return view('seller.register', compact('seller'));
             } else {
                 // Optional: handle other statuses
@@ -318,6 +347,16 @@ class AdminController extends Controller
     }
 
 
+    public function viewMyorders()
+    {
+        $userID = auth()->id();
+        $order = orderModel::where('userID', $userID)->get();
+
+        // var_dump($orders);
+
+        return view('user.order', compact('order'));
+    }
+
     //view Products
     public function viewProducts($categ)
     {
@@ -348,7 +387,8 @@ class AdminController extends Controller
                  'productImage' => $filePath,
                  'productQuantity' => $request->productQuantity,
                  'productCategory' => $request->productCategory,
-                 'productDetails' => $request->productDetails
+                 'productDetails' => $request->productDetails,
+                 'productPrice' => $request->productPrice
                 ];
 
 
@@ -357,6 +397,78 @@ class AdminController extends Controller
 
     }
 
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'productName' => 'required|string|max:255',
+        'productDescription' => 'required|string',
+        'productQuantity' => 'required|integer|min:0',
+        'productPrice' => 'required|numeric|min:0',
+        'productImage' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'productSizes' => 'nullable|array',
+        'productSizes.*.size' => 'nullable|string',
+        // 'productSizes.*.price' => 'nullable|numeric'
+    ]);
 
+    $product = ProductModel::findOrFail($id);
+    $product->productName = $request->productName;
+    $product->productDetails = $request->productDescription;
+    $product->productQuantity = $request->productQuantity;
+    $product->productPrice = $request->productPrice;
+    // $product->sizes = $request->productSizes ?? [];
+
+    if ($request->hasFile('productImage')) {
+        $imagePath = $request->file('productImage')->store('products', 'public');
+        $product->productImage = $imagePath;
+    }
+
+    $product->save();
+
+    return redirect()->back()->with('success', 'Product updated successfully!');
+}
+
+
+public function destroy($id)
+{
+    $product = ProductModel::findOrFail($id);
+
+    // Optionally delete the image file if stored locally
+    if ($product->productImage && Storage::disk('public')->exists($product->productImage)) {
+        Storage::disk('public')->delete($product->productImage);
+    }
+
+    $product->delete();
+
+    return redirect()->back()->with('success', 'Product deleted successfully.');
+}
+
+
+public function assignRider(Request $request, $id)
+{
+    $order = orderModel::findOrFail($id);
+    $order->riderID = $request->rider_id; // make sure your orders table has a rider_id column
+    $order->save();
+
+    return response()->json(['message' => 'Rider assigned to order']);
+}
     
+
+public function riderDashboard()
+{
+
+
+    $riderID = auth()->id();
+
+    $assignOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'claimedByDeliveryPartner')->get();
+    $completeOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'Claimed')->get();
+    $failedOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'notClaimed')->get();
+
+    $orderCompleteCount = orderModel::where('riderID', $riderID)->where('status', 'complete')->count();
+    $orderFailedCount = orderModel::where('riderID', $riderID)->where('status', 'notClaimed')->count();
+    $orderAssignCount = orderModel::where('riderID', $riderID)->where('status', 'claimedByDeliveryPartner')->count();
+
+    $order = orderModel::where('riderID', $riderID)->get();
+    
+    return view('rider.dashboard', compact('assignOrders', 'completeOrders', 'failedOrders','order', 'orderFailedCount', 'orderCompleteCount', 'orderAssignCount'));
+}
 }

@@ -8,6 +8,10 @@
     .navbar-custom {
       background-color: #343a40;
     }
+
+     .img-thumbnail {
+    cursor: pointer;
+  }
   </style>
 </head>
 <body>
@@ -50,74 +54,82 @@
         <thead class="table-dark">
           <tr>
             <th>#</th>
-            <th>Name</th>
-            <th>Email</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
             <th>Address</th>
-            <th>Status</th>
+
             <th>Action</th>
           </tr>
         </thead>
 
-        @if($sellers->isEmpty())
+        @if($product->isEmpty())
         <tbody>
           <tr>
             <td colspan="6" class="text-center text-muted">No pending sellers.</td>
           </tr>
         </tbody>
         @else
-          @foreach($sellers as $seller)
-          <tbody>
-            <tr>
-              <td>{{ $loop->iteration }}</td>
-              <td>{{ $seller->user->name }}</td>
-              <td>{{ $seller->user->email }}</td>
-              <td>{{ $seller->address }}</td>
-              <td>
+         @foreach($product as $product)
+<tbody>
+  <tr>
+    <td>{{ $loop->iteration }}</td>
+    <td>{{ $product->productName }}</td>
+    <td>{{ $product->productQuantity }}</td>
+  <td>
+  <!-- Clickable Image -->
+  <img src="{{ asset('storage/' . $product->productImage) }}"
+       alt="Product Image"
+       width="70"
+       height="70"
+       class="img-thumbnail"
+       data-bs-toggle="modal"
+       data-bs-target="#imagePreviewModal{{ $product->id }}" />
+</td>
 
+    <td>
+      <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewProductModal{{ $product->id }}">
+        View
+      </button>
+    </td>
+  </tr>
+</tbody>
 
-                <select class="form-select status-selector"
-                        data-user-id="{{ $seller->user->id }}"
-                        data-shop-status="{{ $seller->shopStatus }}">
-                  <option value="underReview" {{ $seller->shopStatus == 'underReview' ? 'selected' : '' }}>Under Review</option>
-                  <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
-                  <option value="Suspend" {{ $seller->shopStatus == 'Suspend' ? 'selected' : '' }}>Suspend</option>
-                </select>
-              </td>
-              <td>
-                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#viewSellerModal{{ $seller->id }}">
-                  View
-                </button>
-                <button class="btn btn-sm btn-warning">Edit</button>
-                <button class="btn btn-sm btn-danger">Delete</button>
-              </td>
-            </tr>
-          </tbody>
+<!-- Modal for Product View -->
+<div class="modal fade" id="viewProductModal{{ $product->id }}" tabindex="-1" aria-labelledby="viewProductModalLabel{{ $product->id }}" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="viewProductModalLabel{{ $product->id }}">Product Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body row">
+        <div class="col-md-6 text-center">
+          <img src="{{ asset('storage/' . $product->productImage) }}" alt="Product Image" class="img-fluid rounded border" />
+        </div>
+        <div class="col-md-6">
+          <h5>Name: {{ $product->productName }}</h5>
+          <p><strong>Quantity:</strong> {{ $product->productQuantity }}</p>
+          <p><strong>Description:</strong> {{ $product->productDescription ?? 'N/A' }}</p>
+          <p><strong>Price:</strong> {{ $product->productPrice ?? 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-          <!-- Modal for Seller View -->
-          <div class="modal fade" id="viewSellerModal{{ $seller->id }}" tabindex="-1" aria-labelledby="viewSellerModalLabel{{ $seller->id }}" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="viewSellerModalLabel{{ $seller->id }}">Seller Details</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body row">
-                  <div class="col-md-6 text-center">
-                    <img src="{{ asset('storage/' . $seller->productImage) }}" alt="Product Image" class="img-fluid rounded border" />
-                  </div>
-                  <div class="col-md-6">
-                    <h5>Name: {{ $seller->user->name }}</h5>
-                    <p><strong>Email:</strong> {{ $seller->user->email }}</p>
-                    <p><strong>Address:</strong> {{ $seller->address }}</p>
-                    <p><strong>Business Name:</strong> {{ $seller->bussinessName }}</p>
-                    <p><strong>Business Age:</strong> {{ $seller->businessAge }}</p>
-                    <p><strong>Status:</strong> {{ ucfirst($seller->shopStatus) }}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          @endforeach
+<!-- Image Preview Modal -->
+<div class="modal fade" id="imagePreviewModal{{ $product->id }}" tabindex="-1" aria-labelledby="imagePreviewModalLabel{{ $product->id }}" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-body text-center p-0">
+        <img src="{{ asset('storage/' . $product->productImage) }}" alt="Full Image" class="img-fluid rounded" />
+      </div>
+    </div>
+  </div>
+</div>
+
+@endforeach
+
         @endif
 
       </table>

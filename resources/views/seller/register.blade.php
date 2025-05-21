@@ -98,18 +98,35 @@
   </nav>
 
   <div class="container-fluid full-height">
+  @if(session('success'))
+  <div class="alert alert-success alert-dismissible fade show m-3" role="alert">
+    {{ session('success') }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+@endif
+
     <div class="row h-100">
       <!-- Left side with logo -->
       <div class="col-md-6 d-flex justify-content-center align-items-center left-container">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Logo" class="logo-img" />
+        <img src="{{ asset('storage/logo.png')}}" alt="Logo" class="logo-img" />
       </div>
 
       <!-- Right side with button -->
-      <div class="col-md-6 right-container">
-        <a href="#" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
-          Register to be a seller
-        </a>
-      </div>
+
+      @if(!isset($seller) || $seller === null)
+  <div class="col-md-6 right-container">
+    <a href="#" class="btn btn-warning btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">
+      Register to be a seller
+    </a>
+  </div>
+@else
+  <div class="col-md-6 right-container">
+    <a href="#" class="btn btn-warning btn-lg">
+      Your application is under Review
+    </a>
+  </div>
+@endif
+
     </div>
   </div>
 
@@ -150,9 +167,9 @@
          <select name="shopAge" class="form-control" id="shopAge">
         <option disabled selected>--Select--</option>
          <option value="lessthan 2 Years">Lessthan 2 Years</option>
-         <option value="2-5">2 to 5 Years</option>
-         <option value="5-10">5 to 10 Years</option>
-         <option value="10-15">10 to 15 Years</option>
+         <option value="2-5 Years">2 to 5 Years</option>
+         <option value="5-10 Years">5 to 10 Years</option>
+         <option value="10-15 Years">10 to 15 Years</option>
          <option value="above 16 Years">Above 15 Years</option></select>
           </div>
 
@@ -170,5 +187,15 @@
 
   <!-- Bootstrap JS Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+  setTimeout(() => {
+    const alert = document.querySelector('.alert');
+    if (alert) {
+      alert.classList.remove('show');
+      alert.classList.add('hide');
+    }
+  }, 5000); // auto-dismiss after 5 seconds
+</script>
+
 </body>
 </html>

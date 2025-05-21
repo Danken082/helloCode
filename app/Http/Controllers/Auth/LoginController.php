@@ -31,6 +31,7 @@ class LoginController extends Controller
             {
                 'admin' => redirect()->intended('/dashboard'),
                 'customer' => redirect()->intended('shop/home'),
+                'rider' => redirect()->intended('rider/dashboard'),
                 default => redirect()->intended('/')
             };
 

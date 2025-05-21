@@ -47,4 +47,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+    public function regseller()
+{
+    return $this->hasOne(SellerModel::class, 'userID', 'id');
+}
+
 }

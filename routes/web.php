@@ -45,12 +45,19 @@ Route::middleware(['auth'])->group(function () {
 
     //adding product for vendors
     Route::post('addproduct', [AdminController::class, 'addProduct'])->name('addproduct');
+    Route::put('/products/{id}', [AdminController::class, 'update'])->name('products.update');
+    Route::delete('/products/{id}', [AdminController::class, 'destroy'])->name('products.destroy');
+
 
 
     //ordering products
     Route::post('buynow', [AdminController::class, 'buyNow'])->name('buyNow');
     Route::post('addtocart', [AdminController::class, 'addtoCart'])->name('addtocart');
     Route::post('/orders/update-status/{id}', [AdminController::class, 'updateStatus']);
+
+
+    Route::post('/orders/assign-rider/{id}', [AdminController::class, 'assignRider']);
+    Route::get('rider/dashboard', [AdminController::class, 'riderDashboard'])->middleware('role:rider');
 
     //cartView
 
@@ -59,11 +66,16 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
+    //orders view
+    Route::get('viewOrders',[AdminController::class, 'viewMyorders'])->middleware('role:customer')->name('viewOrders');
+
 
     //seller update
     Route::post('/seller/update-status/{id}', [AdminController::class, 'updateVendorStatus']);
-    Route::get('sellerView/', [AdminController::class, 'viewPendingSellers'])->name('sellerView');
-    Route::get('sellerAccepted/', [AdminController::class, 'viewAcceptedSellers'])->name('sellerAccepted');
+    Route::get('sellerView/', [AdminController::class, 'viewPendingSellers'])->middleware('role:admin')->name('sellerView');
+    Route::get('sellerAccepted/', [AdminController::class, 'viewAcceptedSellers'])->middleware('role:admin')->name('sellerAccepted');
+    Route::get('suspendSeller/', [AdminController::class, 'viewSuspendSellers'])->middleware('role:admin')->name('suspendSeller');
+    Route::get('viewSellerProduct/{id}', [AdminController::class, 'viewProductAdmin'])->middleware('role:admin')->name('viewSellerProduct');
 
 
 });

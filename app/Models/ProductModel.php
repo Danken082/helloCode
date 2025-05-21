@@ -16,7 +16,9 @@ class ProductModel extends Model
         'productImage',
         'productQuantity',
         'productDetails',
+        'productPrice',
         'productCategory',
+        // 'sizes'
     ];
 
 
@@ -28,4 +30,12 @@ class ProductModel extends Model
     // {
     //     return $this->hasMany(ProductSize::class, 'productID');
     // }
+
+        public function user()
+    {
+        return $this->belongsTo(User::class, 'userID');
+    }
+
+
+
 }
