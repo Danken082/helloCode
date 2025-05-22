@@ -159,7 +159,7 @@
                 </td>
                 <td>{{ $item->orderCode }}</td>
                 <td>{{ $item->product->productName }}</td>
-                <td>{{ $item->user->regseller->bussinessName }}</td>
+                <td>{{ $item->user->regseller->bussinessName ?? 'N/A'}}</td>
                 <td>{{ $item->quantity }}</td>
                 <td>{{ $item->product->productPrice }}</td>
                 <td>{{ $item->totalPrice }}</td>
