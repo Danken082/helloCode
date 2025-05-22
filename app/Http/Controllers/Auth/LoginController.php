@@ -173,7 +173,7 @@ public function login(Request $request)
                 // else{
                 //     echo 2;
                 // }
-                return redirect('/')->with('success', 'Created successfully.');
+                return redirect()->back()->with('success', 'Created successfully.');
                 }
 
                 public function profileView()
