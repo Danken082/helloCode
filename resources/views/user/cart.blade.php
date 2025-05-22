@@ -10,7 +10,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-light bg-light px-4 py-3 shadow-sm">
-  <a class="navbar-brand" href="#">EceP</a>
+  <a class="navbar-brand" href="/">EceP</a>
   <div class="d-flex align-items-center gap-2">
     <a href="/seller/center/" class="btn btn-outline-secondary me-2 d-flex align-items-center">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-shop" viewBox="0 0 16 16">

@@ -79,7 +79,7 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-light bg-light px-4 py-3">
-    <a class="navbar-brand fw-bold" href="#">EceP</a>
+    <a class="navbar-brand fw-bold" href="/">EceP</a>
 
     <div class="d-flex align-items-center gap-2">
 

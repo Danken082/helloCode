@@ -13,34 +13,47 @@ use App\Models\User;
 class LoginController extends Controller
 {
 
-    //Session Auth
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => ['required', 'email'],
-            'password' => ['required']
-        ]);
+// Session Auth
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => ['required', 'email'],
+        'password' => ['required']
+    ]);
 
-        if(Auth::attempt($credentials))
-        {
+    // First, check if the user exists with that email
+    $user = \App\Models\User::where('email', $credentials['email'])->first();
 
-            
-            $request->session()->regenerate();
-
-            return match (Auth::user()->role )
-            {
-                'admin' => redirect()->intended('/dashboard'),
-                'customer' => redirect()->intended('shop/home'),
-                'rider' => redirect()->intended('rider/dashboard'),
-                default => redirect()->intended('/')
-            };
-
-        }
-
+    if (!$user || !Hash::check($credentials['password'], $user->password)) {
         return back()->withErrors([
-            'email' => 'Invalid Credentials'
+            'email' => 'Invalid username or password',
         ]);
     }
+
+    // Check if the account is active
+    if ($user->status !== 'active') {
+        return back()->withErrors([
+            'email' => 'Your account has not been validated yet.',
+        ]);
+    }
+
+    // Attempt to login
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+
+        return match (Auth::user()->role) {
+            'admin' => redirect()->intended('/dashboard'),
+            'customer' => redirect()->intended('shop/home'),
+            'rider' => redirect()->intended('rider/dashboard'),
+            default => redirect()->intended('/')
+        };
+    }
+
+    return back()->withErrors([
+        'email' => 'Login failed. Please try again.',
+    ]);
+}
+
 
     public function logout(Request $request)
     {
@@ -81,6 +94,111 @@ class LoginController extends Controller
 
         return redirect('shop/home');
         }
+
+        public function registerRider(Request $request)
+        {
+            $request->validate([
+                'name' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'email', 'max:255', 'unique:users'],
+                'address' => ['required'],
+                'contactNo' => [ 'required',
+                'regex:/^(\+?63|0)9\d{9}$/', // Philippines format: +639XXXXXXXXX or 09XXXXXXXXX
+                'unique:users'],
+                // 'password' => ['required', 'confirmed', 'min:6'],
+            ]);
+    
+            $data = ['name' => $request->name,
+                     'email' => $request->email,
+                     'address' => $request->address,
+                     'contactNo' => $request->contactNo,
+                     'password' => Hash::make($request->password),
+                     'status' => $request->status,
+                     'role' => 'rider'
+                    ];
+    
+            
+            $user = User::create($data);
+               
+            return redirect('/');
+            }
+
+            public function updateRider(Request $request, $id)
+            {
+                $request->validate([
+                    'name' => 'required|string',
+                    'email' => 'required|email',
+                    'address' => 'required|string',
+                    'contactNo' => 'required|regex:/^09\d{9}$/',
+                    'status' => 'required|in:active,inactive',
+                ]);
+
+                $rider = User::findOrFail($id); // or Rider::findOrFail($id) if you're using a separate model
+                $rider->update($request->only(['name', 'email', 'address', 'contactNo','status']));
+
+                return redirect()->back()->with('success', 'Rider updated successfully.');
+            }
+
+
+
+            public function registerAdmin(Request $request)
+            {
+                $request->validate([
+                    'name' => ['required', 'string', 'max:255'],
+                    'email' => ['required', 'email', 'max:255', 'unique:users'],
+                    'address' => ['required'],
+                    'contactNo' => [ 'required',
+                    'regex:/^(\+?63|0)9\d{9}$/', // Philippines format: +639XXXXXXXXX or 09XXXXXXXXX
+                    'unique:users'],
+                    // 'password' => ['required', 'confirmed', 'min:6'],
+                ]);
+        
+                $data = ['name' => $request->name,
+                         'email' => $request->email,
+                         'address' => $request->address,
+                         'contactNo' => $request->contactNo,
+                         'password' => Hash::make($request->password),
+                         'status' => $request->status,
+                         'role' => 'admin'
+                        ];
+        
+                
+                $user = User::create($data);
+                   
+
+                // if($user)
+                // {
+                // echo 1;
+                // }
+                // else{
+                //     echo 2;
+                // }
+                return redirect('/')->with('success', 'Created successfully.');
+                }
+
+                public function profileView()
+                {
+                    $admin = User::where('role', 'admin')->get();
+
+                    return view('admin.admin.profile', compact('admin'));
+            
+                }
+    
+                public function updateAdmin(Request $request, $id)
+                {
+                    $request->validate([
+                        'name' => 'required|string',
+                        'email' => 'required|email',
+                        'address' => 'required|string',
+                        'contactNo' => 'required|regex:/^09\d{9}$/',
+                        'status' => 'required|in:active,inactive',
+                    ]);
+    
+                    $rider = User::findOrFail($id); // or Rider::findOrFail($id) if you're using a separate model
+                    $rider->update($request->only(['name', 'email', 'address', 'contactNo','status']));
+    
+                    return redirect()->back()->with('success', 'Admin updated successfully.');
+                }
+
 
         //guest view
 

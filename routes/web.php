@@ -77,5 +77,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('suspendSeller/', [AdminController::class, 'viewSuspendSellers'])->middleware('role:admin')->name('suspendSeller');
     Route::get('viewSellerProduct/{id}', [AdminController::class, 'viewProductAdmin'])->middleware('role:admin')->name('viewSellerProduct');
 
+    Route::get('/riders', [AdminController::class, 'getRiders'])->middleware('role:admin')->name('riders');
+
+    Route::post('create/rider', [LoginController::class, 'registerRider'])->name('create.rider');
+    Route::put('update/rider/{id}', [LoginController::class, 'updateRider'])->name('update.rider');
+    Route::post('create/admin', [LoginController::class, 'registerAdmin'])->name('create.admin');
+    Route::put('update/admin/{id}', [LoginController::class, 'updateAdmin'])->name('update.admin');
+    Route::get('/admin', [LoginController::class, 'profileView'])->middleware('role:admin')->name('admin');
 
 });

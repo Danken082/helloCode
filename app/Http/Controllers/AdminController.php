@@ -32,6 +32,7 @@ class AdminController extends Controller
         $totalProducts = ProductModel::count();
         $totalCustomers = User::where('role', 'customer')->count();
         $totalRiders = User::where('role', 'rider')->count();
+        $totalAdmin = User::where('role', 'admin')->count();
         
 
         $sellerPagenotations = SellerModel::with('user')->paginate(7);
@@ -42,7 +43,15 @@ class AdminController extends Controller
         $getSellers = SellerModel::all();
 
         return view('admin.dashboard', compact('totalSellers', 'applyingSellers', 'totalCustomers', 'getPendingSellers', 'getSellers', 'totalProducts',
-                                                'sellerPagenotations', 'totalRiders', 'getsuspendSellers'));
+                                                'sellerPagenotations', 'totalRiders', 'getsuspendSellers', 'totalAdmin'));
+    }
+
+    public function getRiders()
+    {
+ 
+        $rider = User::where('role', 'rider')->get();
+
+        return view('admin.rider.profile', compact('rider'));
     }
 
     public function viewPendingSellers()

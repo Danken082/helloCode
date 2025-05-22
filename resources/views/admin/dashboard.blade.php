@@ -108,7 +108,7 @@ select.form-select {
 
     <div class="collapse navbar-collapse" id="adminNavbar">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li class="nav-item">  
           <a class="nav-link active" href="#">Dashboard</a>
         </li>
       </ul>
@@ -160,6 +160,17 @@ select.form-select {
 </div>
 
 <div class="col-md-4">
+  <a href="{{ route('admin)}}" class="text-decoration-none">
+    <div class="card text-dark bg-white mb-4 shadow rounded-4 border-0 hover-scale">
+      <div class="card-body text-center fw-bold">
+        <h5 class="card-title">Total Admin</h5>
+        <p class="card-text display-6">{{ $totalAdmin }}</p>
+      </div>
+    </div>
+  </a>
+</div>
+
+<div class="col-md-4">
   <a href="{{ route('sellerAccepted') }}" class="text-decoration-none">
     <div class="card text-dark bg-white mb-4 shadow rounded-4 border-0 hover-scale">
       <div class="card-body text-center fw-bold">
@@ -170,8 +181,8 @@ select.form-select {
   </a>
 </div>
 
-<div class="col-md-4">
-  <a href="#" class="text-decoration-none">
+  <div class="col-md-4">
+  <a href="{{ route('riders') }}" class="text-decoration-none">
     <div class="card text-dark bg-white mb-4 shadow rounded-4 border-0 hover-scale">
       <div class="card-body text-center fw-bold">
         <h5 class="card-title">Riders</h5>
