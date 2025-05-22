@@ -132,7 +132,7 @@
 
 <!-- Main Content -->
 <div class="container mt-5">
-    <h2>Pending Product Orders</h2>
+    <h2>Product Orders</h2>
     <table>
         <thead>
         <tr>
@@ -148,23 +148,33 @@
         </thead>
         <tbody>
         @foreach($order as $item)
-            <tr>
-                <td>
-                    <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
-                         alt="Product Image"
-                         class="preview-img"
-                         data-bs-toggle="modal"
-                         data-bs-target="#imageModal"
-                         data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
-                </td>
-                <td>{{ $item->orderCode }}</td>
-                <td>{{ $item->product->productName }}</td>
-                <td>{{ $item->product->user->regseller->bussinessName ?? 'N/A'}}</td>    
-                <td>{{ $item->quantity }}</td>
-                <td>{{ $item->product->productPrice }}</td>
-                <td>{{ $item->totalPrice }}</td>
-                <td class="status-pending">{{ $item->status }}</td>
-            </tr>
+        <tr>
+    <td>
+        <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
+             alt="Product Image"
+             class="preview-img"
+             data-bs-toggle="modal"
+             data-bs-target="#imageModal"
+                    data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
+            </td>
+            <td>{{ $item->orderCode }}</td>
+            <td>{{ $item->product->productName }}</td>
+            <td>{{ $item->product->user->regseller->bussinessName ?? 'N/A'}}</td>    
+            <td>{{ $item->quantity }}</td>
+            <td>{{ $item->product->productPrice }}</td>
+            <td>{{ $item->totalPrice }}</td>
+            <td class="status-pending">
+                {{ $item->status }}
+
+                @if($item->status === 'Pending')
+                    <form method="POST" action="{{ route('orders.cancel', $item->id) }}" class="d-inline-block ms-2">
+                        @csrf
+                        <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
+                    </form>
+                @endif
+            </td>
+        </tr>
+
         @endforeach
         </tbody>
     </table>

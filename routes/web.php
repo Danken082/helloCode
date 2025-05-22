@@ -68,6 +68,8 @@ Route::middleware(['auth'])->group(function () {
 
     //orders view
     Route::get('viewOrders',[AdminController::class, 'viewMyorders'])->middleware('role:customer')->name('viewOrders');
+    Route::post('/orders/{id}/cancel', [AdminController::class, 'cancel'])->name('orders.cancel');
+
 
 
     //seller update

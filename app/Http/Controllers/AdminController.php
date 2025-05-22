@@ -179,23 +179,53 @@ class AdminController extends Controller
     }
     
 
+        public function cancel($id)
+    {
+        $order = orderModel::findOrFail($id);
+
+        // Optional: check if order belongs to the current user
+        if ($order->userID !== auth()->id()) {
+            return redirect()->back()->with('error', 'Unauthorized action.');
+        }
+
+        if ($order->status !== 'Pending') {
+            return redirect()->back()->with('error', 'Only pending orders can be cancelled.');
+        }
+
+        $order->status = 'Cancelled';
+        $order->save();
+
+        return redirect()->back()->with('success', 'Order cancelled successfully.');
+    }
+
 
     public function addtoCart(Request $request)
     {
-
         $userID = auth()->id();
-
-        $data = [
-            'prod_id' => $request->product_id,
-            'userID'  => $userID,
-            'totalPrice' => $request->totalPrice,
-            'quantity' => $request->quantity
-        ];
-
-        $cartSave = CartModel::create($data);
-
-        return redirect()->to('shop/home')->with('msg', 'Product is Added to cart');
+    
+        // Check if the product already exists in the cart for the user
+        $existingCart = CartModel::where('prod_id', $request->product_id)
+                                 ->where('userID', $userID)
+                                 ->first();
+    
+        if ($existingCart) {
+            // Update quantity and total price
+            $existingCart->quantity += $request->quantity;
+            $existingCart->totalPrice += $request->totalPrice;
+            $existingCart->save();
+        } else {
+            // Create a new cart item
+            CartModel::create([
+                'prod_id'    => $request->product_id,
+                'userID'     => $userID,
+                'totalPrice' => $request->totalPrice,
+                'quantity'   => $request->quantity
+            ]);
+        }
+    
+        return redirect()->to('shop/home')->with('msg', 'Product is added to cart');
     }
+    
 
     public function registerseller(Request $request)
     {
