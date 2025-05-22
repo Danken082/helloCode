@@ -150,12 +150,12 @@
         @foreach($order as $item)
             <tr>
                 <td>
-                    <img src="{{ asset('storage/' . $item->product->productImage) }}"
+                    <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
                          alt="Product Image"
                          class="preview-img"
                          data-bs-toggle="modal"
                          data-bs-target="#imageModal"
-                         data-img="{{ asset('storage/' . $item->product->productImage) }}">
+                         data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
                 </td>
                 <td>{{ $item->orderCode }}</td>
                 <td>{{ $item->product->productName }}</td>

@@ -165,7 +165,7 @@
 
     <div class="card h-100 shadow-sm rounded-3 position-relative">
       
-      <img src="{{ asset('storage/' . $prod->productImage) }}" class="card-img-top img-fluid" alt="{{ $prod->productName }}" />
+      <img src="{{ asset('storage/app/public/' . $prod->productImage) }}" class="card-img-top img-fluid" alt="{{ $prod->productName }}" />
 
       <!-- View Product overlay -->
       <div class="view-overlay d-none d-md-flex justify-content-center align-items-center">

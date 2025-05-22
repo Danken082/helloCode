@@ -65,7 +65,7 @@
 
   <!-- Navbar -->
   <nav class="navbar navbar-light bg-light px-4 py-3">
-    <a class="navbar-brand" href="#">MyApp</a>
+    <a class="navbar-brand" href="#">EceP</a>
 
     <div class="d-flex align-items-center gap-2">
       <!-- Profile Dropdown -->
@@ -108,7 +108,7 @@
     <div class="row h-100">
       <!-- Left side with logo -->
       <div class="col-md-6 d-flex justify-content-center align-items-center left-container">
-        <img src="{{ asset('storage/logo.png')}}" alt="Logo" class="logo-img" />
+        <img src="{{ asset('storage/app/public/logo.png')}}" alt="Logo" class="logo-img" />
       </div>
 
       <!-- Right side with button -->

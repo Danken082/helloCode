@@ -110,7 +110,7 @@
                 <select class="form-select status-selector" data-order-id="{{ $order->id }}">
                   <option value="claimedByDeliveryPartner" selected>Assign Rider</option>
                   <option value="notClaimed">Not Claimed</option>
-                  <option value="Claimed">Claimed</option>
+                  <option value="Completed">Claimed</option>
                 </select>
               </td>
               <td><a href="#" class="btn btn-sm btn-primary">View</a></td>

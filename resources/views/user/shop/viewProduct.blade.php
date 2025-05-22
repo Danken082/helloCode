@@ -31,7 +31,7 @@
     <div class="col-md-6">
       <div class="card shadow-sm">
         <a href="#" data-bs-toggle="modal" data-bs-target="#imageModal">
-          <img src="{{ asset('storage/' . $product->productImage) }}" 
+          <img src="{{ asset('storage/app/public/' . $product->productImage) }}" 
                class="card-img-top img-fluid custom-img" 
                alt="{{ $product->name }}">
         </a>
@@ -95,7 +95,7 @@
       <button type="button" class="btn-close position-absolute top-0 end-0 m-2" data-bs-dismiss="modal" aria-label="Close"></button>
       
       <div class="modal-body text-center p-0">
-        <img src="{{ asset('storage/' . $product->productImage) }}" 
+        <img src="{{ asset('storage/app/public/' . $product->productImage) }}" 
              alt="{{ $product->name }}" 
              class="img-fluid w-100">
       </div>

@@ -253,18 +253,19 @@
 
           <!-- Rider selection -->
           <div class="rider-selection mt-2">
-            @if($order->rider)
-              <div class="mt-2 text-success fw-bold">
-                Assigned to: {{ $order->rider->name }} ({{ $order->rider->contactNo }})
-              </div>
-            @else
-              <select class="form-select rider-dropdown" data-order-id="{{ $order->id }}">
-                <option value="">Select Rider</option>
-                @foreach($riders as $rider)
-                  <option value="{{ $rider->id }}">{{ $rider->name }} ({{ $rider->contactNo }})</option>
-                @endforeach
-              </select>
-            @endif
+              @if($order->status === 'claimedByDeliveryPartner' && $order->rider && $order->riderID != NULL)
+      <div class="mt-2 text-success fw-bold">
+        Assigned to: {{ $order->rider->name }} ({{ $order->rider->contactNo }})
+      </div>
+    @else
+      <select class="form-select rider-dropdown" data-order-id="{{ $order->id }}">
+        <option value="">Select Rider</option>
+        @foreach($riders as $rider)
+          <option value="{{ $rider->id }}">{{ $rider->name }} ({{ $rider->contactNo }})</option>
+        @endforeach
+      </select>
+    @endif
+
           </div>
         @elseif($order->status == 'Completed')
           <span class="badge bg-success">Completed</span>

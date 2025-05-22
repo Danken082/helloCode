@@ -14,7 +14,8 @@ class orderModel extends Model
         'quantity',
         'totalPrice',
         'orderCode',
-        'status'
+        'status',
+        'riderID'
     ];
 
 

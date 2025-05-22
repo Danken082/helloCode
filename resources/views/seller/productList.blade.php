@@ -51,11 +51,11 @@
           <td>{{ $prod->productQuantity }}</td>
           <td>{{ $prod->productName }}</td>
           <td>
-            <img src="{{ asset('storage/' . $prod->productImage) }}" 
+            <img src="{{ asset('storage/app/public/' . $prod->productImage) }}" 
                  alt="Product Image" 
                  data-bs-toggle="modal" 
                  data-bs-target="#imageModal"
-                 data-bs-img="{{ asset('storage/' . $prod->productImage) }}" />
+                 data-bs-img="{{ asset('storage/app/public/' . $prod->productImage) }}" />
           </td>
           <td>{{ $prod->productPrice }}</td>
           <td>
@@ -69,7 +69,7 @@
               data-quantity="{{ $prod->productQuantity }}"
               data-price="{{ $prod->productPrice }}"
               data-sizes='@json($prod->sizes ?? [])'
-              data-image="{{ asset('storage/' . $prod->productImage) }}">
+              data-image="{{ asset('storage/app/public/' . $prod->productImage) }}">
               Edit
             </button>
             <form action="{{ route('products.destroy', $prod->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this product?');">
