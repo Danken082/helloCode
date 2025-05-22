@@ -177,7 +177,6 @@
         <p class="card-text">{{ $prod->productDetails }}</p>
         <p class="card-text">Stocks: {{ $prod->productQuantity }}</p>
         <p class="card-text">₱ {{ $prod->productPrice }}</p>
-        <p class="card-text">₱ {{ $prod->totalPrice  }}</p>
       </div>
     </div>
     </a>

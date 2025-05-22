@@ -84,6 +84,7 @@ public function login(Request $request)
                  'address' => $request->address,
                  'contactNo' => $request->contactNo,
                  'password' => Hash::make($request->password),
+                 'status' => 'active',
                  'role' => 'customer'
                 ];
 
