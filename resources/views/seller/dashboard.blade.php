@@ -222,6 +222,7 @@
         <thead class="table-dark">
           <tr>
             <th>#</th>
+            <th>Customer Name</th>
             <th>Order Code</th>
             <th>Product</th>
             <th>Quantity</th>
@@ -234,6 +235,7 @@
   @foreach($orders as $order)
     <tr>
       <td>{{ $loop->iteration }}</td>
+      <td>{{ $order->user->name }}</td>
       <td>{{ $order->orderCode }}</td>
       <td>{{ $order->product->productName }}</td>
       <td>{{ $order->quantity }}</td>
@@ -273,7 +275,19 @@
           <span class="badge bg-danger">Cancelled</span>
         @endif
       </td>
-      <td><a href="" class="btn btn-primary btn-sm">View</a></td>
+      <td><a href="#" class="btn btn-primary btn-sm view-order-btn"
+   data-bs-toggle="modal"
+   data-bs-target="#orderDetailModal"
+   data-customer="{{ $order->user->name }}"
+   data-contact="{{ $order->user->contactNo }}"
+   data-email="{{ $order->user->email }}"
+   data-code="{{ $order->orderCode }}"
+   data-product="{{ $order->product->productName }}"
+   data-quantity="{{ $order->quantity }}"
+   data-price="{{ number_format($order->totalPrice, 2) }}"
+   data-status="{{ $order->status }}">
+   View
+</a></td>
     </tr>
   @endforeach
 </tbody>
@@ -394,6 +408,30 @@
   </div>
 </div>
 
+<!-- Order Detail Modal -->
+<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow-sm">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title" id="orderDetailModalLabel">Order Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Customer Name:</strong> <span id="modalCustomerName"></span></p>
+        <p><strong>Contact Number:</strong> <span id="modalContactNumber"></span></p>
+        <p><strong>Contact Email:</strong> <span id="modalEmail"></span></p>
+        <p><strong>Order Code:</strong> <span id="modalOrderCode"></span></p>
+        <p><strong>Product:</strong> <span id="modalProductName"></span></p>
+        <p><strong>Quantity:</strong> <span id="modalQuantity"></span></p>
+        <p><strong>Total Price:</strong> ₱<span id="modalTotalPrice"></span></p>
+        <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+        <!-- Add more fields if needed -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 document.getElementById('toggleSidebar')?.addEventListener('click', function () {
   document.getElementById('sidebar').classList.toggle('active');
@@ -494,6 +532,21 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Failed to assign rider.');
           });
         }
+      });
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.view-order-btn').forEach(function (button) {
+      button.addEventListener('click', function () {
+        document.getElementById('modalCustomerName').textContent = this.getAttribute('data-customer');
+        document.getElementById('modalContactNumber').textContent = this.getAttribute('data-contact');
+        document.getElementById('modalEmail').textContent = this.getAttribute('data-email');
+        document.getElementById('modalOrderCode').textContent = this.getAttribute('data-code');
+        document.getElementById('modalProductName').textContent = this.getAttribute('data-product');
+        document.getElementById('modalQuantity').textContent = this.getAttribute('data-quantity');
+        document.getElementById('modalTotalPrice').textContent = this.getAttribute('data-price');
+        document.getElementById('modalStatus').textContent = this.getAttribute('data-status');
       });
     });
   });
