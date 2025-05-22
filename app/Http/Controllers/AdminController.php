@@ -404,6 +404,8 @@ class AdminController extends Controller
             
        $prod = ProductModel::create($data);
 
+       return redirect()->back()->with('success', 'Product Added Succesfully.');
+
     }
 
     public function update(Request $request, $id)

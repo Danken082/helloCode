@@ -149,8 +149,8 @@
     <a href="#" id="nav-dashboard" class="nav-link" onclick="setActive('dashboard')">Dashboard</a>
     <a href="#" id="nav-products" class="nav-link" onclick="setActive('products')">My Products</a>
     <a href="#" id="nav-orders" class="nav-link" onclick="setActive('orders')">Orders</a>
-    <a href="#" id="nav-messages" class="nav-link">Messages</a>
-    <a href="#" id="nav-profile" class="nav-link" onclick="setActive('profile')">Profile</a>
+    <!-- <a href="#" id="nav-messages" class="nav-link">Messages</a> -->
+    <!-- <a href="#" id="nav-profile" class="nav-link" onclick="setActive('profile')">Profile</a> -->
     <form method="POST" action="{{ route('logout') }}">
         @csrf
         <button type="submit" class="dropdown-item">Logout</button>
@@ -256,7 +256,7 @@
               @if($order->status === 'claimedByDeliveryPartner' && $order->rider && $order->riderID != NULL)
       <div class="mt-2 text-success fw-bold">
         Assigned to: {{ $order->rider->name }} ({{ $order->rider->contactNo }})
-      </div>
+      </div> 
     @else
       <select class="form-select rider-dropdown" data-order-id="{{ $order->id }}">
         <option value="">Select Rider</option>
