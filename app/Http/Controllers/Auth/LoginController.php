@@ -120,7 +120,7 @@ public function login(Request $request)
             
             $user = User::create($data);
                
-            return redirect('/');
+            return redirect()->back()->with('success', 'Rider Added successfully.');
             }
 
             public function updateRider(Request $request, $id)
