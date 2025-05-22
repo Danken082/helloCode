@@ -130,7 +130,7 @@ select.form-select {
 @endif
 <!-- Main Content -->
 <div class="main-content">
-<a href="javascript:history.back()" class="btn btn-outline-secondary mb-4">
+<a href="/dashboad" class="btn btn-outline-secondary mb-4">
       &larr; Back
     </a>
   <section class="mt-5">
