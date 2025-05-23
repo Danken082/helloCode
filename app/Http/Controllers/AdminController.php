@@ -305,7 +305,15 @@ class AdminController extends Controller
         });
 
 
-        $sellerID = SellerModel::where('userID', $userID)->first();
+        $seller = SellerModel::where('userID', $userID)->first();
+
+        if ($seller) {
+            $orders = orderModel::where('userID', $seller->userID)->get();
+        } else {
+            // Handle case where seller is not found
+            $orders = collect(); // empty collection or handle as needed
+        }
+        
         // $sellerID->userID;
         // Find the seller record for the current user
         $seller = SellerModel::where('userID', $userID)->first();
@@ -328,7 +336,7 @@ class AdminController extends Controller
     
         $orderHist = OrderHistoryModel::where('userID', $userID)->get();
 
-        $orders = orderModel::where('userID', $sellerID->userID)->get();
+        // $orders = orderModel::where('userID', $sellerID->userID)->get();
     
         // Redirect based on shopStatus
         if ($seller) {
