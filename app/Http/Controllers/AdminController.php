@@ -326,7 +326,7 @@ class AdminController extends Controller
     
         $orderHist = OrderHistoryModel::where('userID', $userID)->get();
 
-        $orders = orderModel::where('userID', $userID)->get();
+        $orders = orderModel::all();
     
         // Redirect based on shopStatus
         if ($seller) {
