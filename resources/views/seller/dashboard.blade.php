@@ -244,7 +244,7 @@
         
         @if($order->status == 'Pending' || $order->status == 'claimedByDeliveryPartner')
           <select class="form-select status-selector" data-order-id="{{ $order->id }}"
-            data-product-id="{{ $order->product->id }}"
+            data-product-id="{{ $order->product->id ??'N/A'}}"
             data-order-code="{{ $order->orderCode }}"
             data-quantity="{{ $order->quantity }}"
             data-total-price="{{ $order->totalPrice }}">
