@@ -318,7 +318,7 @@ class AdminController extends Controller
                         ->where('status', 'pending')
                         ->get();
 
-        $riders = User::where('role', 'rider')->get();
+        $riders = User::where('role', 'rider')->where('status', 'active')->get();
 
         //counting the data
         $totalPending = $orderPending->count();
