@@ -306,7 +306,7 @@ class AdminController extends Controller
 
 
         $sellerID = SellerModel::where('userID', $userID)->first();
-        $sellerID->userID;
+        // $sellerID->userID;
         // Find the seller record for the current user
         $seller = SellerModel::where('userID', $userID)->first();
         $product = ProductModel::where('userID', $userID)
