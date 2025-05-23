@@ -61,7 +61,7 @@
   <h3 class="mb-4">Your Cart</h3>
 
   @if(count($cartItems) > 0)
-  <form method="POST" action="{{ route('cart.checkout') }}">
+
     
   @csrf
     <div class="table-responsive">
@@ -112,7 +112,7 @@
     <div class="d-flex justify-content-end mt-3">
       <button type="submit" class="btn btn-success">Proceed to Checkout</button>
     </div>
-  </form>
+ 
   @else
     <div class="alert alert-info">Your cart is currently empty.</div>
   @endif
