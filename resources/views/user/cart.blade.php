@@ -91,7 +91,7 @@
                 <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->productQuantity }}" class="form-control form-control-sm">
               </form>
             </td>
-            <td>${{ number_format($item->product->productPrice * $item->quantity, 2) }}</td>
+            <td>₱ {{ number_format($item->product->productPrice * $item->quantity, 2) }}</td>
             <td>
               <form method="POST" action="{{ route('cart.remove', $item->id) }}">
                 @csrf
@@ -106,7 +106,7 @@
     </div>
 
     <div class="d-flex justify-content-end">
-      <h5>Total Selected: <strong id="selectedTotal">$0.00</strong></h5>
+      <h5>Total Selected: <strong id="selectedTotal">₱ 0.00</strong></h5>
     </div>
 
     <div class="d-flex justify-content-end mt-3">
