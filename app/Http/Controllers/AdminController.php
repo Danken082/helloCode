@@ -305,8 +305,8 @@ class AdminController extends Controller
         });
 
 
-
-
+        $sellerID = SellerModel::where('userID', $userID)->first();
+        $sellerID->userID;
         // Find the seller record for the current user
         $seller = SellerModel::where('userID', $userID)->first();
         $product = ProductModel::where('userID', $userID)
@@ -323,10 +323,12 @@ class AdminController extends Controller
         //counting the data
         $totalPending = $orderPending->count();
         $totalProducts = $product->count();
+
+        
     
         $orderHist = OrderHistoryModel::where('userID', $userID)->get();
 
-        $orders = orderModel::all();
+        $orders = orderModel::where('userID', $sellerID->userID)->get();
     
         // Redirect based on shopStatus
         if ($seller) {
