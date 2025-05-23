@@ -85,6 +85,9 @@ Route::middleware(['auth'])->group(function () {
     Route::put('update/rider/{id}', [LoginController::class, 'updateRider'])->name('update.rider');
     Route::post('create/admin', [LoginController::class, 'registerAdmin'])->name('create.admin');
     Route::put('update/admin/{id}', [LoginController::class, 'updateAdmin'])->name('update.admin');
+    Route::put('update/customer/{id}', [LoginController::class, 'updateCustomers'])->name('update.customer');
     Route::get('/admin', [LoginController::class, 'profileView'])->middleware('role:admin')->name('admin');
+
+    Route::get('/customer', [LoginController::class, 'customerProfile'])->middleware('role:admin')->name('customer');
 
 });

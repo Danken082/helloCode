@@ -200,6 +200,29 @@ public function login(Request $request)
                     return redirect()->back()->with('success', 'Admin updated successfully.');
                 }
 
+                public function updateCustomers(Request $request, $id)
+                {
+                    $request->validate([
+                        'name' => 'required|string',
+                        'email' => 'required|email',
+                        'address' => 'required|string',
+                        'contactNo' => 'required|regex:/^09\d{9}$/',
+                        'status' => 'required|in:active,inactive',
+                    ]);
+    
+                    $rider = User::findOrFail($id); // or Rider::findOrFail($id) if you're using a separate model
+                    $rider->update($request->only(['status']));
+    
+                    return redirect()->back()->with('success', 'Admin updated successfully.');
+                }
+
+                public function customerProfile()
+                {
+                    $customer = User::where('role', 'customer')->get();
+
+                    return view('admin.user.profile', compact('customer'));
+                }
+
 
         //guest view
 

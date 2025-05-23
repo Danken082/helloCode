@@ -130,7 +130,7 @@ select.form-select {
 @endif
 <!-- Main Content -->
 <div class="main-content">
-<a href="/dashboard" class="btn btn-outline-secondary mb-4">
+<a href="/dashboad" class="btn btn-outline-secondary mb-4">
       &larr; Back
     </a>
   <section class="mt-5">
@@ -151,7 +151,7 @@ select.form-select {
             <th>Action</th>
           </tr>
         </thead>
-        @foreach($admin as $user)
+        @foreach($customer as $user)
         <tbody>
           <tr>
             <td>{{ $loop->iteration }}</td>
@@ -228,7 +228,7 @@ select.form-select {
         </div>
 
         <div class="modal-footer">
-          <button type="submit" class="btn btn-success">Add Admin</button>
+          <button type="submit" class="btn btn-success">Add Rider</button>
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
@@ -237,49 +237,21 @@ select.form-select {
 </div>
 
 {{-- Edit Rider Modals --}}
-@foreach($admin as $user)
+@foreach($customer as $user)
 <div class="modal fade" id="editRiderModal{{ $user->id }}" tabindex="-1" aria-labelledby="editRiderModalLabel{{ $user->id }}" aria-hidden="true">
   <div class="modal-dialog">
-    <form action="{{ route('update.admin', $user->id) }}" method="POST">
+    <form action="{{ route('update.customer', $user->id) }}" method="POST">
       @csrf
       @method('PUT')
 
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="editRiderModalLabel{{ $user->id }}">Edit Admin</h5>
+          <h5 class="modal-title" id="editRiderModalLabel{{ $user->id }}"></h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
 
+
         <div class="modal-body">
-          <div class="mb-3">
-            <label for="name{{ $user->id }}" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name{{ $user->id }}" name="name" value="{{ $user->name }}" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="email{{ $user->id }}" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email{{ $user->id }}" name="email" value="{{ $user->email }}" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="address{{ $user->id }}" class="form-label">Address</label>
-            <textarea class="form-control" id="address{{ $user->id }}" name="address" rows="2" required>{{ $user->address }}</textarea>
-          </div>
-
-          <div class="mb-3">
-            <label for="contact_number{{ $user->id }}" class="form-label">Phone Number</label>
-            <input
-              type="tel"
-              name="contactNo"
-              class="form-control"
-              id="contact_number{{ $user->id }}"
-              pattern="^09\d{9}$"
-              value="{{ $user->contactNo }}"
-              required
-            />
-            <small class="text-muted">Must be a valid mobile number starting with 09</small>
-          </div>
-
           <div class="mb-3">
             <label for="status{{ $user->id }}" class="form-label">Status</label>
             <select class="form-select" id="status{{ $user->id }}" name="status" required>

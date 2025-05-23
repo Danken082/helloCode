@@ -158,7 +158,7 @@ select.form-select {
 </div>
 
 <div class="col-md-4">
-  <a href="#" class="text-decoration-none">
+  <a href="/customer" class="text-decoration-none">
     <div class="card text-dark bg-white mb-4 shadow rounded-4 border-0 hover-scale">
       <div class="card-body text-center fw-bold">
         <h5 class="card-title">Total Customers</h5>
