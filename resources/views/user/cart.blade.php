@@ -131,7 +131,7 @@
           total += parseFloat(checkbox.getAttribute('data-subtotal'));
         }
       });
-      totalDisplay.textContent = `$${total.toFixed(2)}`;
+      totalDisplay.textContent = `₱ ${total.toFixed(2)}`;
     }
 
     checkboxes.forEach(checkbox => {
