@@ -237,7 +237,7 @@
       <td>{{ $loop->iteration }}</td>
       <td>{{ $order->user->name }}</td>
       <td>{{ $order->orderCode }}</td>
-      <td>{{ $order->product->productName ?? 'N/A'}}</td>
+      <td>{{ $order->product->productName ?? 'Hello'}}</td>
       <td>{{ $order->quantity }}</td>
       <td>₱ {{ number_format($order->totalPrice, 2) }}</td>
       <td>
@@ -282,7 +282,7 @@
    data-contact="{{ $order->user->contactNo }}"
    data-email="{{ $order->user->email }}"
    data-code="{{ $order->orderCode }}"
-   data-product="{{ $order->product->productName }}"
+   data-product="{{ $order->product->productName  ?? 'Hello' }}"
    data-quantity="{{ $order->quantity }}"
    data-price="{{ number_format($order->totalPrice, 2) }}"
    data-status="{{ $order->status }}">
