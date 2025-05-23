@@ -237,7 +237,7 @@
       <td>{{ $loop->iteration }}</td>
       <td>{{ $order->user->name }}</td>
       <td>{{ $order->orderCode }}</td>
-      <td>{{ $order->product->productName }}</td>
+      <td>{{ $order->product->productName ?? 'N/A'}}</td>
       <td>{{ $order->quantity }}</td>
       <td>₱ {{ number_format($order->totalPrice, 2) }}</td>
       <td>
