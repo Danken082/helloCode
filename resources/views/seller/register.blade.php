@@ -103,9 +103,9 @@
 
     <div class="col-md-6 right-container">
       @if(!isset($seller) || $seller === null)
-        <button class="btn btn-tertiary btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">Register to be a seller</button>
+        <button class="btn btn-success btn-lg" data-bs-toggle="modal" data-bs-target="#registerModal">Register to be a seller</button>
       @else
-        <button class="btn btn-tertiary btn-lg" disabled>Your Account is under Review</button>
+        <button class="btn btn-success btn-lg" disabled>Your Account is under Review</button>
       @endif
     </div>
   </div>
