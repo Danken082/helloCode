@@ -30,4 +30,10 @@ class orderModel extends Model
     {
         return $this->belongsTo(User::class, 'userID');
     }
+
+    public function rider()
+    {
+        return $this->belongsTo(User::class, 'riderID');
+    }
+
 }

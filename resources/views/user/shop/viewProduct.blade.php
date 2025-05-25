@@ -73,6 +73,7 @@
           <form id="buyForm" method="POST" action="{{ route('buyNow') }}"> 
             @csrf
             <input type="hidden" name="product_id" value="{{ $product->id }}">
+            <input type="hidden" name="userID" value="{{ $product->userID }}">
             <input type="hidden" name="quantity" id="buyQuantity" value="1">
             <input type="hidden" name="totalPrice" id="totalPriceOrder" value="{{ $product->productPrice }}">
           </form>

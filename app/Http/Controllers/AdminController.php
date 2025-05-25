@@ -165,7 +165,7 @@ class AdminController extends Controller
     
         // Create the order
         $data = [
-            'userID' => $userID,
+            'userID' => $request->userID,
             'prod_id' => $request->product_id,
             'quantity' => $request->quantity,
             'totalPrice' => $request->totalPrice,
@@ -305,10 +305,15 @@ class AdminController extends Controller
         });
 
 
+
+
         $seller = SellerModel::where('userID', $userID)->first();
 
         if ($seller) {
-            $orders = orderModel::where('userID', $seller->userID)->get();
+            $orders = orderModel::where('userID', $seller->userID)
+            ->orderBy('created_at', 'desc') // or orderBy('id', 'desc')
+            ->get();
+        
         } else {
             // Handle case where seller is not found
             $orders = collect(); // empty collection or handle as needed
@@ -325,6 +330,7 @@ class AdminController extends Controller
         $orderPending = orderModel::where('userID', $userID)
                         ->where('status', 'pending')
                         ->get();
+
 
         $riders = User::where('role', 'rider')->where('status', 'active')->get();
 
@@ -373,7 +379,7 @@ class AdminController extends Controller
         // Move to order history if status becomes 'Completed'
         if ($order->status === 'Completed') {
             OrderHistoryModel::create([
-                'userID' => $userID,
+                'userID' => $request->userID,
                 // 'order_id' => $order->id,
                 'prod_id' => $request->productId,
                 'orderCode' => $request->orderCode,
@@ -409,7 +415,7 @@ class AdminController extends Controller
     //view Products
     public function viewProducts($categ)
     {
-        $prod = ProductModel::where('productCategory', $categ)->get();
+        $prod = ProductModel::where('productCategory', $categ)->where('userID', auth()->id())->get();
 
 
         return view('seller.productList', compact('prod'));
@@ -511,10 +517,10 @@ public function riderDashboard()
     $riderID = auth()->id();
 
     $assignOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'claimedByDeliveryPartner')->get();
-    $completeOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'Claimed')->get();
+    $completeOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'Completed')->get();
     $failedOrders = orderModel::with(['user.regseller', 'product'])->where('riderID', $riderID)->where('status', 'notClaimed')->get();
 
-    $orderCompleteCount = orderModel::where('riderID', $riderID)->where('status', 'complete')->count();
+    $orderCompleteCount = orderModel::where('riderID', $riderID)->where('status', 'Completed')->count();
     $orderFailedCount = orderModel::where('riderID', $riderID)->where('status', 'notClaimed')->count();
     $orderAssignCount = orderModel::where('riderID', $riderID)->where('status', 'claimedByDeliveryPartner')->count();
 

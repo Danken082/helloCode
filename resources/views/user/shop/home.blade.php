@@ -5,9 +5,19 @@
 @section('content')
 <section class="container my-5">
  
+
+
 <h2 class="mb-4" style="color: black; text-transform: uppercase; font-size: 25px; display: inline-block; border-bottom: 3px solid #0E753F; padding-bottom: 2px;">
   Products
 </h2>
+
+  <select id="categoryFilter" class="form-select d-inline w-auto mx-auto" style="max-width: 200px;">
+      <option value="all">All Categories</option>
+      @foreach($categories as $category)
+        <option value="{{ $category->productCategory }}">{{ $category->productCategory }}</option>
+      @endforeach
+    </select>
+
 
 
   <div class="row g-4">

@@ -4,13 +4,6 @@
   <div class="d-flex align-items-center gap-3 ms-auto">
     
 
-  <select id="categoryFilter" class="form-select d-inline w-auto mx-auto" style="max-width: 200px;">
-      <option value="all">All Categories</option>
-      @foreach($categories as $category)
-        <option value="{{ $category->productCategory }}">{{ $category->productCategory }}</option>
-      @endforeach
-    </select>
-
     <!-- Search -->
     <div class="position-relative search-wrapper">
       <input id="searchInput" class="form-control search-input" type="search" placeholder="Search for products" aria-label="Search">
@@ -29,7 +22,7 @@
       <!-- Cart -->
       <a href="{{ route('viewCart') }}" class="icon-btn" title="Cart">
         <i class="bi bi-cart"></i>
-        <span class="cart-badge">0</span>
+        <span class="cart-badge">{{ $cartCount }}</span>
       </a>
 
       <!-- Profile Dropdown -->

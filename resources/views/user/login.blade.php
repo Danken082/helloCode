@@ -14,6 +14,14 @@
   Products
 </h2>
 
+
+<select id="categoryFilter" class="form-select d-inline w-auto mx-auto" style="max-width: 200px;">
+      <option value="all">All Categories</option>
+      @foreach($categories as $category)
+        <option value="{{ $category->productCategory }}">{{ $category->productCategory }}</option>
+      @endforeach
+    </select>
+
     <div class="row g-4">
       <!-- Product 1 -->
 

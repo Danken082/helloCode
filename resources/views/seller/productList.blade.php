@@ -59,7 +59,6 @@
           </td>
           <td>{{ $prod->productPrice }}</td>
           <td>
-            <button type="button" class="btn btn-primary btn-sm me-1">View</button>
             <button type="button" class="btn btn-success btn-sm me-1 edit-btn" 
               data-bs-toggle="modal" 
               data-bs-target="#editProductModal"

@@ -127,89 +127,113 @@
      font-weight: bold;
     }
 
+
+
+    .hover-effect:hover {
+    background-color: #f8f9fa;
+    text-decoration: none;
+  }
+
+  .nav-link.active {
+    background-color: #e9ecef !important;
+    font-weight: bold;
+  }
+
+  .sidebar {
+    transition: left 0.3s ease-in-out;
+    z-index: 1030;
+  }
+
+  @media (max-width: 767.98px) {
+    .sidebar {
+      left: -100%;
+    }
+    .sidebar.show {
+      left: 0;
+    }
+  }
+
   </style>
 </head>
 <body>
 
 <!-- Mobile Navbar -->
-<div class="mobile-nav d-md-none">
-  <button class="btn btn-outline-light" id="toggleSidebar">&#9776; Menu</button>
+<div class="mobile-nav d-md-none p-2 bg-light border-bottom">
+  <button class="btn btn-sm btn-outline-dark" id="toggleSidebar">&#9776; Menu</button>
 </div>
+
 <!-- Sidebar -->
-<div class="sidebar" id="sidebar">
-  <div class="sidebar-close-btn d-md-none">
-    <button class="btn btn-sm btn-outline-secondary mt-2" id="closeSidebar">&times; Close</button>
+<div class="sidebar bg-white shadow-sm border-end" id="sidebar" style="width: 240px; height: 100vh; position: fixed; left: 0; top: 0; overflow-y: auto;">
+  <div class="sidebar-close-btn d-md-none text-end p-2">
+    <button class="btn btn-sm btn-outline-secondary" id="closeSidebar">&times;</button>
   </div>
-  <div class="sidebar-header">
-    <!-- <img src="https://via.placeholder.com/60" alt="Profile Picture"> -->
-    <div>Seller:<strong>{{ Auth::user()->name }}</strong></div>
-    <div><strong>Shop Name:</strong> {{ Auth::user()->regseller->bussinessName ?? 'N/A' }}</div>
-    <small>{{ Auth::user()->email }}</small>
+
+  <div class="sidebar-header px-3 py-2 border-bottom">
+    <div class="fw-semibold text-dark mb-1">Seller: <span class="text-muted">{{ Auth::user()->name }}</span></div>
+    <div class="small text-muted mb-1"><strong>Shop:</strong> {{ Auth::user()->regseller->bussinessName ?? 'N/A' }}</div>
+    <div class="small text-muted">{{ Auth::user()->email }}</div>
   </div>
-    <a href="#" id="nav-dashboard" class="nav-link" onclick="setActive('dashboard')">Dashboard</a>
-    <a href="#" id="nav-products" class="nav-link" onclick="setActive('products')">My Products</a>
-    <a href="#" id="nav-orders" class="nav-link" onclick="setActive('orders')">Orders</a>
-    <!-- <a href="#" id="nav-messages" class="nav-link">Messages</a> -->
-    <!-- <a href="#" id="nav-profile" class="nav-link" onclick="setActive('profile')">Profile</a> -->
-    <form method="POST" action="{{ route('logout') }}">
-        @csrf
-        <button type="submit" class="dropdown-item">Logout</button>
-      </form>
+
+  <nav class="nav flex-column mt-3 px-2">
+    <a href="#" id="nav-dashboard" class="nav-link text-dark py-2 px-3 rounded hover-effect" onclick="setActive('dashboard')">Dashboard</a>
+    <a href="#" id="nav-products" class="nav-link text-dark py-2 px-3 rounded hover-effect" onclick="setActive('products')">My Products</a>
+    <a href="#" id="nav-orders" class="nav-link text-dark py-2 px-3 rounded hover-effect" onclick="setActive('orders')">Orders</a>
+    
+    <form method="POST" action="{{ route('logout') }}" class="mt-3 px-2">
+      @csrf
+      <button type="submit" class="btn btn-sm btn-outline-danger w-100">Logout</button>
+    </form>
+  </nav>
 </div>
 
 
 <!-- Page Content -->
 <div class="content">
-  <section id="dashboard">
-    <h2>Welcome to Seller Dashboard</h2>
-    <p>Manage your products, orders, and shop profile here.</p>
+<section id="dashboard" class="p-3">
+  <h4 class="fw-semibold mb-2">Seller Dashboard</h4>
+  <p class="text-muted small mb-4">Manage your products, orders, and shop profile.</p>
 
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <div class="card p-3 bg-light text-center">
-          <h5>Total Products</h5>
-          <h3>{{ $totalProducts}}</h3>
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="card p-3 bg-light text-center">
-          <h5>Total Sales (Month)</h5>
-          <h3>₱ {{$totalSales}}</h3>
-        </div>
-      </div>
-
-      <div class="col-md-6">
-        <div class="card p-3 bg-light text-center">
-          <h5>Total Pending Orders</h5>
-          <h3>{{$totalPending}}</h3>
-        </div>
+  <div class="row g-3">
+    <div class="col-md-4">
+      <div class="border rounded p-3 text-center bg-white shadow-sm">
+        <div class="text-muted small">Total Products</div>
+        <h4 class="mb-0">{{ $totalProducts }}</h4>
       </div>
     </div>
-
-    <div class="card mt-4">
-      <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">Best Selling Products</h5>
+    <div class="col-md-4">
+      <div class="border rounded p-3 text-center bg-white shadow-sm">
+        <div class="text-muted small">Monthly Sales</div>
+        <h4 class="mb-0">₱ {{ $totalSales }}</h4>
       </div>
-      <div class="card-body">
-  @if($bestSellers->isEmpty())
-    <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-      <p class="mb-0">No sales yet</p>
-      </li>
-    </ul>
-  @else
-    <ul class="list-group">
-      @foreach($bestSellers as $best)
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-          {{ $best->productName}}
-          <span class="badge bg-success rounded-pill">{{ $best->total_sold }}</span>
-        </li>
-      @endforeach
-    </ul>
-  @endif
-</div>
+    </div>
+    <div class="col-md-4">
+      <div class="border rounded p-3 text-center bg-white shadow-sm">
+        <div class="text-muted small">Pending Orders</div>
+        <h4 class="mb-0">{{ $totalPending }}</h4>
+      </div>
+    </div>
+  </div>
 
-  </section>
+  <div class="mt-4 border rounded shadow-sm">
+    <div class="p-3 border-bottom bg-light">
+      <h6 class="mb-0 fw-semibold">Best Selling Products</h6>
+    </div>
+    <div class="p-3">
+      <ul class="list-group list-group-flush">
+        @if($bestSellers->isEmpty())
+          <li class="list-group-item text-muted text-center small">No sales yet</li>
+        @else
+          @foreach($bestSellers as $best)
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              {{ $best->productName }}
+              <span class="badge bg-success rounded-pill">{{ $best->total_sold }}</span>
+            </li>
+          @endforeach
+        @endif
+      </ul>
+    </div>
+  </div>
+</section>
 
 
   <section id="my-orders" style="display:none;" class="mt-5">
@@ -218,45 +242,44 @@
 
     <!-- Orders Table -->
     <div class="table-responsive">
-      <table class="table table-striped">
-        <thead class="table-dark">
+    <table class="table table-hover align-middle">
+        <thead class="table-light border-bottom">
           <tr>
             <th>#</th>
-            <th>Customer Name</th>
+            <th>Customer</th>
             <th>Order Code</th>
             <th>Product</th>
-            <th>Quantity</th>
-            <th>Total Price</th>
+            <th>Qty</th>
+            <th>Total</th>
             <th>Status</th>
-            <th>Action</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-  @foreach($orders as $order)
-    <tr>
-      <td>{{ $loop->iteration }}</td>
-      <td>{{ $order->user->name }}</td>
-      <td>{{ $order->orderCode }}</td>
-      <td>{{ $order->product->productName ?? 'Hello'}}</td>
-      <td>{{ $order->quantity }}</td>
-      <td>₱ {{ number_format($order->totalPrice, 2) }}</td>
-      <td>
-        
-        @if($order->status == 'Pending' || $order->status == 'claimedByDeliveryPartner')
-          <select class="form-select status-selector" data-order-id="{{ $order->id }}"
-            data-product-id="{{ $order->product->id ??'N/A'}}"
-            data-order-code="{{ $order->orderCode }}"
-            data-quantity="{{ $order->quantity }}"
-            data-total-price="{{ $order->totalPrice }}">
-            <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
-            <option value="claimedByDeliveryPartner" {{ $order->status == 'claimedByDeliveryPartner' ? 'selected' : '' }}>Assign Rider</option>
-            <option value="Cancelled" {{ $order->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
-          </select>
+          @foreach($orders as $order)
+          <tr>
+            <td>{{ $loop->iteration }}</td>
+            <td>{{ $order->user->name }}</td>
+            <td><span class="text-muted small">{{ $order->orderCode }}</span></td>
+            <td>{{ $order->product->productName ?? 'N/A' }}</td>
+            <td>{{ $order->quantity }}</td>
+            <td>₱{{ number_format($order->totalPrice, 2) }}</td>
+            <td>
+              @if(in_array($order->status, ['Pending', 'claimedByDeliveryPartner']))
+                <select class="form-select form-select-sm status-selector"
+                  data-order-id="{{ $order->id }}"
+                  data-product-id="{{ $order->product->id ?? 'N/A' }}"
+                  data-order-code="{{ $order->orderCode }}"
+                  data-quantity="{{ $order->quantity }}"
+                  data-total-price="{{ $order->totalPrice }}">
+                  <option value="Pending" {{ $order->status == 'Pending' ? 'selected' : '' }}>Pending</option>
+                  <option value="claimedByDeliveryPartner" {{ $order->status == 'claimedByDeliveryPartner' ? 'selected' : '' }}>Assign Rider</option>
+                  <option value="Cancelled" {{ $order->status == 'Cancelled' ? 'selected' : '' }}>Cancelled</option>
+                </select>
 
-          <!-- Rider selection -->
-          <div class="rider-selection mt-2">
-              @if($order->status === 'claimedByDeliveryPartner' && $order->rider && $order->riderID != NULL)
-      <div class="mt-2 text-success fw-bold">
+                <div class="rider-selection mt-2">
+              @if($order->status === 'claimedByDeliveryPartner' && $order->riderID != NULL)
+      <div class="mt-2 text-success fw-bold" style="text-transform:uppercase;">
         Assigned to: {{ $order->rider->name }} ({{ $order->rider->contactNo }})
       </div> 
     @else
@@ -268,69 +291,62 @@
       </select>
     @endif
 
-          </div>
-        @elseif($order->status == 'Completed')
-          <span class="badge bg-success">Completed</span>
-        @else
-          <span class="badge bg-danger">Cancelled</span>
-        @endif
-      </td>
-      <td><a href="#" class="btn btn-primary btn-sm view-order-btn"
-   data-bs-toggle="modal"
-   data-bs-target="#orderDetailModal"
-   data-customer="{{ $order->user->name }}"
-   data-contact="{{ $order->user->contactNo }}"
-   data-email="{{ $order->user->email }}"
-   data-code="{{ $order->orderCode }}"
-   data-product="{{ $order->product->productName  ?? 'Hello' }}"
-   data-quantity="{{ $order->quantity }}"
-   data-price="{{ number_format($order->totalPrice, 2) }}"
-   data-status="{{ $order->status }}">
-   View
-</a></td>
-    </tr>
-  @endforeach
-</tbody>
-
+              @elseif($order->status == 'Completed')
+                <span class="badge bg-success">Completed</span>
+              @else
+                <span class="badge bg-danger">Cancelled</span>
+              @endif
+            </td>
+            <td>
+              <a href="#" class="btn btn-sm btn-outline-dark view-order-btn"
+                data-bs-toggle="modal"
+                data-bs-target="#orderDetailModal"
+                data-customer="{{ $order->user->name }}"
+                data-contact="{{ $order->user->contactNo }}"
+                data-email="{{ $order->user->email }}"
+                data-code="{{ $order->orderCode }}"
+                data-product="{{ $order->product->productName ?? 'N/A' }}"
+                data-quantity="{{ $order->quantity }}"
+                data-price="{{ number_format($order->totalPrice, 2) }}"
+                data-status="{{ $order->status }}">
+                View
+              </a>
+            </td>
+          </tr>
+          @endforeach
+        </tbody>
       </table>
+
     </div>
   </div>  
     </section>
   
-  <!-- My Products Form Section -->
-  <section id="my-products" class="mt-5">
+    <section id="my-products" class="mt-4">
+  <!-- Add Product Button -->
+  <button class="btn btn-outline-dark rounded-pill px-4 mb-4" data-bs-toggle="modal" data-bs-target="#addProducts">
+    + Add Product
+  </button>
 
-
-<!-- Minimalist Button -->
-<button class="btn btn-outline-primary rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#addProducts">
-  + Add Product
-</button>
-<br>
-<br>
-<div class="alert alert-info d-flex align-items-center gap-2 p-3 rounded shadow-sm" role="alert">
-  <i class="bi bi-tags-fill"></i>
-  <span class="fw-semibold">Your registered categories:</span>
-</div>
-
-  <div class="row g-3">
-
- 
-  
-  @foreach($product as $prod)
-    <div class="col-md-4">
-    <a href="{{ route('viewProducts', $prod->productCategory)}}" style="text-decoration:none; font:black;">
-      <div class="category-box" onclick="showForm('electronics')">
-     
-      {{$prod->productCategory}}
-        
-      </div>
-      </a>
-    </div>
-    @endforeach
-
+  <!-- Info Alert -->
+  <div class="alert alert-light border d-flex align-items-center gap-2 p-3 shadow-sm" role="alert">
+    <i class="bi bi-tags-fill text-primary"></i>
+    <span class="fw-semibold">Your registered categories:</span>
   </div>
 
-  </section>
+  <!-- Product Categories -->
+  <div class="row g-3">
+    @foreach($product as $prod)
+      <div class="col-md-4">
+        <a href="{{ route('viewProducts', $prod->productCategory) }}" class="text-decoration-none">
+          <div class="border rounded p-3 text-center bg-white shadow-sm category-box hover-scale">
+            <span class="fw-medium text-dark">{{ $prod->productCategory }}</span>
+          </div>
+        </a>
+      </div>
+    @endforeach
+  </div>
+</section>
+
 
   <section id="my-profile" style="display:none;"class="mt-5">
     <div class="col-md-4">
@@ -550,6 +566,8 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
