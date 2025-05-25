@@ -19,7 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
 
         ]);
 
-        $middleware->redirectGuestsTo(fn (Request $request) => '/');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
