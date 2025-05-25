@@ -77,7 +77,7 @@
     <td>{{ $product->productQuantity }}</td>
   <td>
   <!-- Clickable Image -->
-  <img src="{{ asset('storage/' . $product->productImage) }}"
+  <img src="{{ asset('storage/app/public/' . $product->productImage) }}"
        alt="Product Image"
        width="70"
        height="70"
