@@ -152,7 +152,7 @@ select.form-select {
             
             <td>
               <select class="form-select status-selector"
-                      data-user-id="{{ $seller->user->id }}">
+                      data-user-id="{{ $seller->id }}">
              
                 <option value="Suspend" {{ $seller->shopStatus == 'Suspend' ? 'selected' : '' }}>Suspend</option>
                  <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
