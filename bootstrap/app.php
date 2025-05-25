@@ -15,9 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             //role
-            'role' => RoleMiddleware::class,
+            'role' => RoleMiddleware::class,  
 
         ]);
+
+        $middleware->redirectGuestsTo(fn (Request $request) => '/');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

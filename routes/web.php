@@ -16,7 +16,7 @@ Route::get('/', function () {
 //auth session
 Route::post('/login', [LoginController::class, 'login'])->name('login');
 
-Route::get('/', [LoginController::class,'guestView'])->middleware('role:guest');
+Route::get('/login', [LoginController::class,'guestView'])->middleware('role:guest');
 
 Route::get('/register', [LoginController::class, 'showRegistrationForm'])->name('register.form');
 Route::post('/register', [LoginController::class, 'register'])->name('register');

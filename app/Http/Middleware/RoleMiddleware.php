@@ -23,7 +23,7 @@ class RoleMiddleware
                 return $next($request);  // Allow guests
             } else {
                 // If role expected is not guest but user is guest, deny access
-                abort(403);
+                abort(403); 
             }
         }
     
@@ -38,6 +38,7 @@ class RoleMiddleware
         if ($user->role !== $role) {
             abort(403);
         }
-    
+
+        return $next($request);
         return $next($request);    }
 }
