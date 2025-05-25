@@ -255,7 +255,7 @@ select.form-select {
             <td>{{ $seller->businessAge }}</td>
             <td>
               <select class="form-select status-selector"
-                data-user-id="{{ $seller->user->id }}"
+                data-user-id="{{ $seller->id }}"
                 data-shop-status="{{ $seller->shopStatus }}">
                 <option value="underReview" {{ $seller->shopStatus == 'underReview' ? 'selected' : '' }}>Under Review</option>
                 <option value="shopAccepted" {{ $seller->shopStatus == 'shopAccepted' ? 'selected' : '' }}>Activate</option>
