@@ -65,7 +65,7 @@
 </head>
 <body>
 
-<nav class="navbar custom-navbar px-4 py-4" style="background-color: #0E753F;">
+<nav class="navbar custom-navbar px-4 py-4">
   <a class="navbar-brand fw-bold" href="#">EceP</a>
 
   <div class="dropdown ms-auto">
