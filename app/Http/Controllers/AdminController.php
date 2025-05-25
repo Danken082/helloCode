@@ -300,7 +300,7 @@ class AdminController extends Controller
         // Fetch product names for display
         $bestSellers = $bestSellers->map(function ($item) {
             $product = ProductModel::find($item->prod_id);
-            $item->productName = $product->productName ?? 'Unknown';
+            $item->prod_id = $product->productName ?? 'Unknown';
             return $item;
         });
 
