@@ -31,7 +31,7 @@
             <td><input type="checkbox" class="item-checkbox" name="selectedItems[]" value="{{ $item->id }}" data-subtotal="{{ $item->product->productPrice * $item->quantity }}"></td>
             <td><img src="{{ asset('storage/app/public/' . $item->product->productImage) }}" width="60" class="img-thumbnail"></td>
             <td>{{ $item->product->productName }}</td>
-            <td>${{ number_format($item->product->productPrice, 2) }}</td>
+            <td>₱ {{ number_format($item->product->productPrice, 2) }}</td>
             <td>
               <form method="POST" action="{{ route('cart.update', $item->id) }}">
                 @csrf
