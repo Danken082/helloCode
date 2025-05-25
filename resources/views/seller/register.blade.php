@@ -58,11 +58,14 @@
     .dropdown-toggle::after {
       display: none;
     }
+    .custom-navbar{
+      background-color: #0E753F;
+    }
   </style>
 </head>
 <body>
 
-<nav class="navbar px-4">
+<nav class="navbar custom-navbar px-4 px-5">
   <a class="navbar-brand fw-bold" href="#">EceP</a>
 
   <div class="dropdown ms-auto">
