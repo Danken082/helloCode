@@ -243,7 +243,7 @@ select.form-select {
             <td>{{ $seller->user->email }}</td>
             <td>
               <img 
-                src="{{ asset('storage/' . $seller->productImage) }}" 
+                src="{{ asset('storage/app/public/' . $seller->productImage) }}" 
                 alt="Product Image" 
                 style="width: 100px; height: auto; cursor: pointer;"
                 data-bs-toggle="modal"
