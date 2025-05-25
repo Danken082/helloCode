@@ -5,6 +5,9 @@
   <title>@yield('title', 'EceP')</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+
+  <link rel="icon" href="{{ asset('storage/app/public/logo.png') }}">
+
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
 
@@ -18,20 +21,20 @@
       font-family: 'Poppins', sans-serif;
     }
     .modal-header {
-      background-color: #37BAE2;
+      background-color: #0E753F;
       color: white;
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
     }
     .btn-login {
-      background-color: #37BAE2;
+      background-color: #0E753F;
       color: white;
     }
     .btn-login:hover {
       background-color: #2a91c4;
     }
     .form-control:focus {
-      border-color: #37BAE2;
+      border-color: #0E753F;
       box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
     }
     .navbar .form-inline {

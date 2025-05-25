@@ -16,9 +16,7 @@
         <a href="{{ route('productPreview', encrypt($prod->id)) }}" style="text-decoration:none;">
           <div class="card h-100 shadow-sm rounded-3 position-relative">
             <img src="{{ asset('storage/app/public/' . $prod->productImage) }}" class="card-img-top img-fluid" alt="{{ $prod->productName }}" />
-            <div class="view-overlay d-none d-md-flex justify-content-center align-items-center">
-              <span>View Product</span>
-            </div>
+      
             <div class="card-body">
               <h5 class="card-title" style="font-weight: 550;">{{ $prod->productName }}</h5>
               <p class="card-text" style="color:#A5A5A5;">{{ $prod->productDetails }}</p>
