@@ -75,7 +75,6 @@
     </a>
 
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
-      <li><a class="dropdown-item" href="/profile">Shop Profile</a></li>
       <li><hr class="dropdown-divider" /></li>
       <li><a class="dropdown-item" href="/shop/home">Order Products</a></li>
       <li><hr class="dropdown-divider" /></li>
