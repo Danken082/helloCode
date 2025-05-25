@@ -152,7 +152,7 @@
           </div>
 
           <div class="d-grid">
-            <button type="submit" class="btn btn-primary btn-login">Apply</button>
+            <button type="submit" class="btn btn-success btn-login">Apply</button>
           </div>
         </form>
       </div>
