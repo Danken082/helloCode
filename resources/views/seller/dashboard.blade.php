@@ -257,6 +257,7 @@
         </thead>
         <tbody>
           @foreach($orders as $order)
+          @if(isset($order->product))
           <tr>
             <td>{{ $loop->iteration }}</td>
             <td>{{ $order->user->name }}</td>
@@ -313,6 +314,7 @@
               </a>
             </td>
           </tr>
+          @endif
           @endforeach
         </tbody>
       </table>
