@@ -23,13 +23,23 @@
         @foreach($order as $item)
         <tr>
     <td>
-        <img src="{{ asset('storage/app/public/' . $item->product->productImage ?? 'N/A') }}"
+
+    @if(isset($item->product) && $item->product->productImage)
+    <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
              alt="Product Image"
              class="preview-img"
              data-bs-toggle="modal"
              data-bs-target="#imageModal"
-                    data-img="{{ asset('storage/app/public/' . $item->product->productImage ?? 'N/A') }}">
-            </td>
+                    data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
+@else
+<img src="{{ asset('storage/app/public/default.png') }}"
+             alt="Product Image"
+             class="preview-img"
+             data-bs-toggle="modal"
+             data-bs-target="#imageModal"
+                    data-img="{{ asset('storage/app/public/default.png') }}">
+@endif
+        </td>
             <td>{{ $item->orderCode }}</td>
             <td>{{ $item->product->productName }}</td>
             <td>{{ $item->product->user->regseller->bussinessName ?? 'N/A'}}</td>    
