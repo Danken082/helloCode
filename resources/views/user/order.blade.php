@@ -45,8 +45,10 @@
                 <p>Delivered</p>
                
                 @elseif($item->status === 'Pending')
+                
                     <form method="POST" action="{{ route('orders.cancel', $item->id) }}" class="d-inline-block ms-2">
                         @csrf
+<span>Pending</span>
                         <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
                     </form>
 
