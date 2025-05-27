@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use App\Models\CartModel;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ProductModel;
+use App\Models\orderModel;
+use Illuminate\Support\Facades\DB;
+
 class CartController extends Controller
 {
     public function cartView()
@@ -71,6 +74,51 @@ class CartController extends Controller
 
     // Pass to checkout form or process payment
     return view('user.checkout', compact('cartItems'));
+}
+
+
+public function submit(Request $request)
+{
+    $userID = auth()->id();
+    $selectedCartItemIDs = $request->input('checkoutItems', []);
+
+    if (empty($selectedCartItemIDs)) {
+        return redirect('viewCart')->with('error', 'No items selected for checkout.');
+    }
+
+    $cartItems = CartModel::with('product')
+        ->where('userID', $userID)
+        ->whereIn('id', $selectedCartItemIDs)
+        ->get();
+
+    DB::beginTransaction();
+
+    try {
+        foreach ($cartItems as $item) {
+            $total = $item->product->productPrice * $item->quantity;
+            $orderCode = 'ORD-' . strtoupper(uniqid()) . '-' . rand(1000, 9999);
+
+            orderModel::create([
+                'prod_id'     => $item->product->id,
+                'userID'      => $userID,
+                'quantity'    => $item->quantity,
+                'totalPrice'  => $total,
+                'orderCode'   => $orderCode,
+                'status'      => 'Pending',
+                'riderID'     => null, // or use a default value if needed
+            ]);
+        }
+
+        // Remove selected cart items
+        CartModel::whereIn('id', $selectedCartItemIDs)->delete();
+
+        DB::commit();
+
+        return redirect('viewCart')->with('success', 'Order(s) placed successfully!');
+    } catch (\Exception $e) {
+        DB::rollBack();
+        return redirect('viewCart')->with('error', 'Failed to place order. Please try again.');
+    }
 }
 
 }

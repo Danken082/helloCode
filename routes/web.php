@@ -65,6 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
     Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/checkout/submit', [CartController::class, 'submit'])->name('checkout.submit');
 
     //orders view
     Route::get('viewOrders',[AdminController::class, 'viewMyorders'])->middleware('role:customer')->name('viewOrders');
