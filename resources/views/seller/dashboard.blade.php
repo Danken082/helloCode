@@ -169,7 +169,7 @@
   </div>
 
   <div class="sidebar-header px-3 py-2 border-bottom">
-    <div class="fw-semibold text-dark mb-1">Seller: <span class="text-muted">{{ Auth::user()->name }}</span></div>
+    <div class="fw-semibold text-dark mb-1">Seller: <span class="text-muted"  style="text-transform:uppercase;">{{ Auth::user()->name }}</span></div>
     <div class="small text-muted mb-1"><strong>Shop:</strong> {{ Auth::user()->regseller->bussinessName ?? 'N/A' }}</div>
     <div class="small text-muted">{{ Auth::user()->email }}</div>
   </div>
