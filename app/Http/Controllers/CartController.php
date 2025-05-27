@@ -13,7 +13,7 @@ class CartController extends Controller
         $userID = auth()->id();
         // $user = Auth::user();
         $cartItems = CartModel::with('product')
-            ->where('userID', $userID)
+            ->where('userID', $userID)->limit(1)
             ->get();
 
         //     $totalPrice = $cartItems->sum(function ($item) {
