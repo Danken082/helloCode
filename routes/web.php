@@ -10,7 +10,7 @@ use App\Http\Controllers\CartController;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware('role:guest');
 
 
 //auth session
@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('viewCart',[CartController::class, 'cartView'])->middleware('role:customer')->name('viewCart');
     Route::post('/cart/update/{id}', [CartController::class, 'updateQuantity'])->name('cart.update');
     Route::delete('/cart/remove/{id}', [CartController::class, 'removeItem'])->name('cart.remove');
-    Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+    Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
     //orders view
     Route::get('viewOrders',[AdminController::class, 'viewMyorders'])->middleware('role:customer')->name('viewOrders');

@@ -12,54 +12,60 @@
 
     
   @csrf
-    <div class="table-responsive">
-      <table class="table align-middle table-bordered bg-white">
-        <thead class="table-light">
-          <tr>
-            <th><input type="checkbox" id="selectAll"></th>
-            <th>Product</th>
-            <th>Name</th>
-            <th>Price</th>
-            <th style="width: 120px">Quantity</th>
-            <th>Subtotal</th>
-            <th>Remove</th>
-          </tr>
-        </thead>
-        <tbody>
-          @foreach($cartItems as $item)
-          <tr>
-            <td><input type="checkbox" class="item-checkbox" name="selectedItems[]" value="{{ $item->id }}" data-subtotal="{{ $item->product->productPrice * $item->quantity }}"></td>
-            <td><img src="{{ asset('storage/app/public/' . $item->product->productImage) }}" width="60" class="img-thumbnail"></td>
-            <td>{{ $item->product->productName }}</td>
-            <td>₱ {{ number_format($item->product->productPrice, 2) }}</td>
-            <td>
-              <form method="POST" action="{{ route('cart.update', $item->id) }}">
-                @csrf
+  <form method="POST" action="{{ route('cart.checkout') }}">
+  @csrf
+  <div class="table-responsive">
+    <table class="table align-middle table-bordered bg-white">
+      <thead class="table-light">
+        <tr>
+          <th><input type="checkbox" id="selectAll"></th>
+          <th>Product</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th style="width: 120px">Quantity</th>
+          <th>Subtotal</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($cartItems as $item)
+        <tr>
+          <td>
+            <input type="checkbox" class="item-checkbox" name="selectedItems[]" value="{{ $item->id }}" data-subtotal="{{ $item->product->productPrice * $item->quantity }}">
+          </td>
+          <td><img src="{{ asset('storage/app/public/' . $item->product->productImage) }}" width="60" class="img-thumbnail"></td>
+          <td>{{ $item->product->productName }}</td>
+          <td>₱ {{ number_format($item->product->productPrice, 2) }}</td>
+          <td>
+          <form method="POST" action="{{ route('cart.update', $item->id) }}" class="update-form">
+          @csrf
+          <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->productQuantity }}" class="form-control form-control-sm quantity-input">
+        </form>
 
-                <input type="number" name="quantity" value="{{ $item->quantity }}" min="1" max="{{ $item->product->productQuantity }}" class="form-control form-control-sm">
-              </form>
-            </td>
-            <td>₱ {{ number_format($item->product->productPrice * $item->quantity, 2) }}</td>
-            <td>
-              <form method="POST" action="{{ route('cart.remove', $item->id) }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-              </form>
-            </td>
-          </tr>
-          @endforeach
-        </tbody>
-      </table>
-    </div>
+          </td>
+          <td>₱ {{ number_format($item->product->productPrice * $item->quantity, 2) }}</td>
+          <td>
+            <form method="POST" action="{{ route('cart.remove', $item->id) }}">
+              @csrf
+              @method('DELETE')
+              <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+            </form>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+  </div>
 
-    <div class="d-flex justify-content-end">
-      <h5>Total Selected: <strong id="selectedTotal">₱ 0.00</strong></h5>
-    </div>
+  <div class="d-flex justify-content-end">
+    <h5>Total Selected: <strong id="selectedTotal">₱ 0.00</strong></h5>
+  </div>
 
-    <div class="d-flex justify-content-end mt-3">
-      <button type="submit" class="btn btn-success">Proceed to Checkout</button>
-    </div>
+  <div class="d-flex justify-content-end mt-3">
+    <button type="submit" class="btn btn-success">Proceed to Checkout</button>
+  </div>
+</form>
+
  
   @else
     <div class="alert alert-info">Your cart is currently empty.</div>
@@ -71,34 +77,46 @@
 @push('scripts')
 
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const checkboxes = document.querySelectorAll('.item-checkbox');
-    const totalDisplay = document.getElementById('selectedTotal');
-    const selectAll = document.getElementById('selectAll');
+ document.addEventListener('DOMContentLoaded', function () {
+  const quantityInputs = document.querySelectorAll('.quantity-input');
 
-    function updateTotal() {
-      let total = 0;
-      checkboxes.forEach(checkbox => {
-        if (checkbox.checked) {
-          total += parseFloat(checkbox.getAttribute('data-subtotal'));
-        }
-      });
-      totalDisplay.textContent = `₱ ${total.toFixed(2)}`;
-    }
+  quantityInputs.forEach(input => {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault(); // Prevent outer form from submitting
+        this.closest('form').submit(); // Submit the specific quantity update form
+      }
+    });
+  });
 
+  // Your existing script for subtotal selection
+  const checkboxes = document.querySelectorAll('.item-checkbox');
+  const totalDisplay = document.getElementById('selectedTotal');
+  const selectAll = document.getElementById('selectAll');
+
+  function updateTotal() {
+    let total = 0;
     checkboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', updateTotal);
+      if (checkbox.checked) {
+        total += parseFloat(checkbox.getAttribute('data-subtotal'));
+      }
     });
+    totalDisplay.textContent = `₱ ${total.toFixed(2)}`;
+  }
 
-    selectAll.addEventListener('change', function () {
-      checkboxes.forEach(checkbox => {
-        checkbox.checked = selectAll.checked;
-      });
-      updateTotal();
+  checkboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', updateTotal);
+  });
+
+  selectAll.addEventListener('change', function () {
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = selectAll.checked;
     });
-
     updateTotal();
   });
+
+  updateTotal();
+});
 </script>
 
 @endpush

@@ -37,7 +37,7 @@
       <div class="card-body">
       <h5 class="card-title" style="font-weight: 550;">{{ $prod->productName }}</h5>
               <p class="card-text" style="color:#A5A5A5;">{{ $prod->productDetails }}</p>
-              <p class="card-text" style="font-weight: 550;">₱ {{ $prod->productPrice }} Stocks: {{ $prod->productQuantity }}</p>
+              <p class="card-text" style="font-weight: 550; color:#0E753F;">₱ {{ $prod->productPrice }} Stocks: {{ $prod->productQuantity }}</p>
       </div>
     </div>
     </a>
