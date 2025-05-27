@@ -21,67 +21,64 @@
         </thead>
         <tbody>
         @foreach($order as $item)
+    @if(isset($item->product)) {{-- Only display if product still exists --}}
         <tr>
-    <td>
-
-    @if(isset($item->product) && $item->product->productImage)
-    <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
-             alt="Product Image"
-             class="preview-img"
-             data-bs-toggle="modal"
-             data-bs-target="#imageModal"
-                    data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
-@else
-<img src="{{ asset('storage/app/public/default.png') }}"
-             alt="Product Image"
-             class="preview-img"
-             data-bs-toggle="modal"
-             data-bs-target="#imageModal"
-                    data-img="{{ asset('storage/app/public/default.png') }}">
-@endif
-        </td>
+            <td>
+                @if($item->product->productImage)
+                    <img src="{{ asset('storage/app/public/' . $item->product->productImage) }}"
+                         alt="Product Image"
+                         class="preview-img"
+                         data-bs-toggle="modal"
+                         data-bs-target="#imageModal"
+                         data-img="{{ asset('storage/app/public/' . $item->product->productImage) }}">
+                @else
+                    <img src="{{ asset('storage/app/public/default.png') }}"
+                         alt="Product Image"
+                         class="preview-img"
+                         data-bs-toggle="modal"
+                         data-bs-target="#imageModal"
+                         data-img="{{ asset('storage/app/public/default.png') }}">
+                @endif
+            </td>
             <td>{{ $item->orderCode }}</td>
-            <td>{{ $item->product->productName ?? 'N/A'}}</td>
+            <td>{{ $item->product->productName }}</td>
             <td>{{ $item->product->user->regseller->bussinessName ?? 'N/A'}}</td>    
-            <td>{{ $item->quantity ?? 'N/A'}}</td>
-            <td>{{ $item->product->productPrice ?? 'N/A'}}</td>
+            <td>{{ $item->quantity }}</td>
+            <td>{{ $item->product->productPrice }}</td>
             <td>{{ $item->totalPrice }}</td>
             <td class="status-pending">
-              
+                {{-- Keep your status logic here --}}
                 @if($item->status === 'claimedByDeliveryPartner')
-                <p>Out of Delivery</p>
-                <p>Rider Name: <strong style="text-transform:uppercase;">{{ $item->rider->name }}</strong></p>
+                    <p>Out of Delivery</p>
+                    <p>Rider Name: <strong style="text-transform:uppercase;">{{ $item->rider->name }}</strong></p>
                 @elseif($item->status === 'Completed')
-                <p>Delivered</p>
-               
-
-                <button type="button"
-                class="btn btn-sm btn-success mt-2"
-                data-bs-toggle="modal"
-                data-bs-target="#reviewModal"
-                data-productname="{{ $item->product->productName ?? 'N/A' }}"
-                data-productid="{{ $item->product->id ?? 'N/A'}}"
-                data-orderid="{{ $item->id }}">
-            Leave a Review
-        </button>
-        @elseif($item->status === 'CompleteWReview')
-        <p>Complete</p>
-        <p style="color:green;">Thank you for review</p>
+                    <p>Delivered</p>
+                    <button type="button"
+                        class="btn btn-sm btn-success mt-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#reviewModal"
+                        data-productname="{{ $item->product->productName }}"
+                        data-productid="{{ $item->product->id }}"
+                        data-orderid="{{ $item->id }}">
+                        Leave a Review
+                    </button>
+                @elseif($item->status === 'CompleteWReview')
+                    <p>Complete</p>
+                    <p style="color:green;">Thank you for review</p>
                 @elseif($item->status === 'Pending')
-                
                     <form method="POST" action="{{ route('orders.cancel', $item->id) }}" class="d-inline-block ms-2">
                         @csrf
-<span>Pending</span>
+                        <span>Pending</span>
                         <button type="submit" class="btn btn-sm btn-danger">Cancel</button>
                     </form>
-
                 @else
-                <p>Cancelled Order</p>
+                    <p>Cancelled Order</p>
                 @endif
             </td>
         </tr>
+    @endif
+@endforeach
 
-        @endforeach
         </tbody>
     </table>
 </div>

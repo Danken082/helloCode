@@ -446,7 +446,8 @@ class AdminController extends Controller
     public function viewMyorders()
     {
         $userID = auth()->id();
-        $order = orderModel::where('userID', $userID)->orderBy('created_at', 'DESC')->get();
+        $order = orderModel::with(['product', 'product.user.regseller', 'rider']) ->whereHas('product')
+        ->where('userID', $userID)->orderBy('created_at', 'DESC')->get();
 
         // var_dump($orders);
 
