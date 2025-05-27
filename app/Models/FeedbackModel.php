@@ -16,4 +16,14 @@ class FeedbackModel extends Model
         'ratings',
         
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'userID');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(ProductModel::class, 'prod_id');
+    }
 }

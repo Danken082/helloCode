@@ -163,7 +163,8 @@ class AdminController extends Controller
         if ($request->quantity > $prod->productQuantity) {
             return back()->with('error', 'Not enough stock available.');
         }
-    
+        $orderCode = 'ORD-' . strtoupper(uniqid()) . '-' . rand(1000, 9999);
+
         // Reduce product quantity
         $prod->productQuantity -= $request->quantity;
         $prod->save();
@@ -445,7 +446,7 @@ class AdminController extends Controller
     public function viewMyorders()
     {
         $userID = auth()->id();
-        $order = orderModel::where('userID', $userID)->get();
+        $order = orderModel::where('userID', $userID)->orderBy('created_at', 'DESC')->get();
 
         // var_dump($orders);
 
