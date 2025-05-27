@@ -58,36 +58,21 @@ class CartController extends Controller
  }
 
  // Checkout Selected Items
- public function checkout(Request $request, $id)
- {
-     $request->validate([
-         'selected_items' => 'required|array',
-         'selected_items.*' => 'integer|exists:carts,id',
-     ]);
+ public function checkout(Request $request)
+{
+    $selectedItems = $request->input('selectedItems');
 
-     $userId = Auth::id();
+    if (!$selectedItems || count($selectedItems) === 0) {
+        return redirect()->back()->with('error', 'Please select at least one item to proceed.');
+    }
 
-    // return 1;
-     $selectedItems = CartModel::with('product')
-         ->where('userID', $userId)
-         ->whereIn('id', $request->selected_items)
-         ->get();
+    // Retrieve selected cart items
+    $cartItems = Cart::whereIn('id', $selectedItems)->with('product')->get();
 
-     if ($selectedItems->isEmpty()) {
-         return redirect()->route('viewCart')->with('error', 'No items selected for checkout.');
+    // Pass to checkout form or process payment
+    return view('checkout.form', compact('cartItems'));
+}
 
-        return 1;
-     }
-    //  return 1;
-
-     $totalAmount = $selectedItems->sum(function ($item) {
-         return $item->product->productPrice * $item->quantity;
-     });
-
-     // Proceed with your order placement logic
-     // For demo:
-     return view('user.checkout', compact('selectedItems', 'totalAmount'));
- }
 }
 
 
