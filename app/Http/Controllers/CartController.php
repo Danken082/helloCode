@@ -16,11 +16,13 @@ class CartController extends Controller
             ->where('userID', $userID)
             ->get();
 
-            $totalPrice = $cartItems->sum(function ($item) {
-                return $item->product->productPrice * $item->quantity;
-            });
+        //     $totalPrice = $cartItems->sum(function ($item) {
+        //         return $item->product-> * $item->quantity;
+        //     });
 
-        return view('user.cart', compact('cartItems', 'totalPrice'));
+        // return view('user.cart', compact('cartItems', 'totalPrice'));
+
+        var_dump($cartItems);
     }
 
     public function updateQuantity(Request $request, $id)
