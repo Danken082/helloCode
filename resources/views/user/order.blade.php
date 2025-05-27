@@ -41,10 +41,10 @@
 @endif
         </td>
             <td>{{ $item->orderCode }}</td>
-            <td>{{ $item->product->productName }}</td>
+            <td>{{ $item->product->productName ?? 'N/A'}}</td>
             <td>{{ $item->product->user->regseller->bussinessName ?? 'N/A'}}</td>    
-            <td>{{ $item->quantity }}</td>
-            <td>{{ $item->product->productPrice }}</td>
+            <td>{{ $item->quantity ?? 'N/A'}}</td>
+            <td>{{ $item->product->productPrice ?? 'N/A'}}</td>
             <td>{{ $item->totalPrice }}</td>
             <td class="status-pending">
               
