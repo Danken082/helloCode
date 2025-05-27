@@ -5,9 +5,6 @@
 @section('content')
 <div class="container py-4">
   <h3 class="mb-4">Checkout</h3>
-
-  <form method="POST" action="">
-    @csrf
     @php $total = 0; @endphp
 
 <ul class="list-group">
@@ -32,6 +29,5 @@
     <div class="mt-4">
       <button type="submit" class="btn btn-primary">Place Order</button>
     </div>
-  </form>
 </div>
 @endsection
