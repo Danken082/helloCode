@@ -260,7 +260,7 @@
           @if(isset($order->product))
           <tr>
             <td>{{ $loop->iteration }}</td>
-            <td>{{ $order->user->name }}</td>
+            <td style="text-transform:uppercase;">{{ $order->user->name }}</td>
             <td><span class="text-muted small">{{ $order->orderCode }}</span></td>
             <td>{{ $order->product->productName ?? 'N/A' }}</td>
             <td>{{ $order->quantity }}</td>
