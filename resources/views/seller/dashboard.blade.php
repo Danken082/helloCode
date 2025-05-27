@@ -291,7 +291,7 @@
       </select>
     @endif
 
-              @elseif($order->status == 'Completed')
+              @elseif(in_array($order->status, ['Completed', 'CompleteWReview']))
                 <span class="badge bg-success">Completed</span>
               @else
                 <span class="badge bg-danger">Cancelled</span>
