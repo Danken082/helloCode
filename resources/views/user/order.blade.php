@@ -59,7 +59,7 @@
                 class="btn btn-sm btn-success mt-2"
                 data-bs-toggle="modal"
                 data-bs-target="#reviewModal"
-                data-productname="{{ $item->product->productName }}"
+                data-productname="{{ $item->product->productName ?? 'N/A' }}"
                 data-productid="{{ $item->product->id }}"
                 data-orderid="{{ $item->id }}">
             Leave a Review
