@@ -70,7 +70,7 @@ class CartController extends Controller
     $cartItems = CartModel::whereIn('id', $selectedItems)->with('product')->get();
 
     // Pass to checkout form or process payment
-    return view('checkout.form', compact('cartItems'));
+    return view('user.checkout', compact('cartItems'));
 }
 
 }
