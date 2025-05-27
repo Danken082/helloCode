@@ -8,6 +8,7 @@ use App\Models\SellerModel;
 use App\Models\OrderHistoryModel;
 use App\Models\orderModel;
 use App\Models\CartModel;
+use App\Models\FeedbackModel;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -135,7 +136,12 @@ class AdminController extends Controller
         try {
             $id = Crypt::decrypt($encryptedId);
             $product = ProductModel::findOrFail($id);
-            return view('user.shop.viewProduct', compact('product'));
+
+            $prodId = $product->id;
+
+
+            $feedBack = FeedbackModel::where('prod_id', $prodId)->get();
+            return view('user.shop.viewProduct', compact('product', 'feedBack'));
         } catch (\Exception $e) {
             abort(404); // If the encrypted ID is invalid or can't be decrypted
         }
@@ -149,8 +155,7 @@ class AdminController extends Controller
             'totalPrice' => 'required|numeric|min:0.01',
         ]);
     
-        $orderCode = 'ORD-' . strtoupper(uniqid()) . '-' . rand(1000, 9999);
-        $userID = auth()->id();
+               $userID = auth()->id();
     
         $prod = ProductModel::findOrFail($request->product_id);
     
@@ -178,6 +183,41 @@ class AdminController extends Controller
         return redirect()->to('shop/home')->with('msg', 'Order Successful');
     }
     
+
+
+    //product Review
+
+    public function reviewProduct(Request $request)
+    {
+    $request->validate([
+        'product_id' => 'required|integer',
+        'order_id' => 'required|integer',
+        'review' => 'required|string|max:1000',
+        'rating' => 'required|integer|min:1|max:5',
+    ]);
+
+    if ($request->hasFile('complainImage')) {
+        $filePath = $request->file('complainImage')->store('complaints', 'public');
+    } else {
+        $filePath = null;
+    }
+    
+    FeedbackModel::create([
+        'userID' => auth()->id(),
+        'prod_id' => $request->product_id,
+        'comment' => $request->review,
+        'complainImage' => $filePath,
+        'ratings' => $request->rating,
+    ]);
+
+    $order = orderModel::findOrFail($request->order_id);
+            $order->status = 'CompleteWReview';
+
+            $order->save();
+        // var_dump($order);
+
+    return back()->with('success', 'Thank you for your review!');
+    }
 
         public function cancel($id)
     {
