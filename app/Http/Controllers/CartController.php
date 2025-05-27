@@ -13,12 +13,12 @@ class CartController extends Controller
         $userID = auth()->id();
         // $user = Auth::user();
         $cartItems = CartModel::with('product')
-            ->where('userID', $userID)->limit(1)
+            ->where('userID', $userID)
             ->get();
 
-        //     $totalPrice = $cartItems->sum(function ($item) {
-        //         return $item->product-> * $item->quantity;
-        //     });
+            $totalPrice = $cartItems->sum(function ($item) {
+                return $item->product->productPrice * $item->quantity;
+            });
 
         // return view('user.cart', compact('cartItems', 'totalPrice'));
 
