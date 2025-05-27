@@ -67,7 +67,7 @@ class CartController extends Controller
     }
 
     // Retrieve selected cart items
-    $cartItems = Cart::whereIn('id', $selectedItems)->with('product')->get();
+    $cartItems = CartModel::whereIn('id', $selectedItems)->with('product')->get();
 
     // Pass to checkout form or process payment
     return view('checkout.form', compact('cartItems'));
