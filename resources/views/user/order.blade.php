@@ -60,7 +60,7 @@
                 data-bs-toggle="modal"
                 data-bs-target="#reviewModal"
                 data-productname="{{ $item->product->productName ?? 'N/A' }}"
-                data-productid="{{ $item->product->id }}"
+                data-productid="{{ $item->product->id ?? 'N/A'}}"
                 data-orderid="{{ $item->id }}">
             Leave a Review
         </button>
