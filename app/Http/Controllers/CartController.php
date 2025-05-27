@@ -23,7 +23,10 @@ class CartController extends Controller
             //     return $item->product->productPrice * $item->quantity;
             // });
 
-            var_dump($cartItems['id']);
+            foreach ($cartItems as $item) {
+                var_dump($item->id); // or $item->product->productName, etc.
+            }
+            
         // return view('user.cart', compact('cartItems', 'totalPrice'));
     }
 
